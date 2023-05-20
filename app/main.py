@@ -39,3 +39,8 @@ def read_robot(robot_id: int, db: Session = Depends(get_db)):
 def read_weight_class(weight_class: str, db: Session = Depends(get_db)):
     robots = crud.get_robots_by_weight_class(db, weight_class=weight_class)
     return robots
+
+@app.get('/')
+def homepage():
+    print('get request reached the home page')
+    return 'Hello'
