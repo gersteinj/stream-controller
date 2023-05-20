@@ -34,3 +34,8 @@ def read_robot(robot_id: int, db: Session = Depends(get_db)):
     if db_robot is None:
         raise HTTPException(status_code=404, detail="Robot Not Found :(")
     return db_robot
+
+@app.get('/wc/{weight_class}')
+def read_weight_class(weight_class: str, db: Session = Depends(get_db)):
+    robots = crud.get_robots_by_weight_class(db, weight_class=weight_class)
+    return robots

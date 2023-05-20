@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 
 from .database import Base
 
+
 class Robot(Base):
     __tablename__ = 'robots'
 
@@ -10,3 +11,4 @@ class Robot(Base):
     name = Column(String, unique=True, index=True)
     display_name = Column(String)
     weight_class = Column(String)
+    

@@ -18,6 +18,9 @@ def get_robot_by_name(db: Session, name: str):
 def get_robots(db: Session, skip: int=0, limit: int=100):
     return db.query(models.Robot).offset(skip).limit(limit).all()
 
+def get_robots_by_weight_class(db: Session, weight_class: str):
+    return db.query(models.Robot).filter(models.Robot.weight_class == weight_class).all()
+
 def create_robot(db: Session, robot: schemas.Robot):
     db_robot = models.Robot(display_name=robot.display_name, weight_class=robot.weight_class, name=convert_name(robot.display_name))
     db.add(db_robot)
