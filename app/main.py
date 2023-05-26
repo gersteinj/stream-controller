@@ -1,4 +1,5 @@
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, WebSocket
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 
@@ -53,16 +54,23 @@ def homepage():
     print('get request reached the home page')
     return 'Hello'
 
-@app.get('/test/')
-def test_page(say: str | None = None):
-    if say:
-        return {'message': say}
-    return {'message': 'empty get request received'}
+# @app.get('/test/')
+# def test_page(say: str | None = None):
+#     if say:
+#         return {'message': say}
+#     return {'message': 'empty get request received'}
 
-@app.post('/test/')
-def test_post():
-    return {'message': 'post request received'}
+# @app.post('/test/')
+# def test_post():
+#     return {'message': 'post request received'}
 
-@app.post('/test/advanced')
-def advanced_test_post(robot: schemas.Robot):
-    return crud.convert_name(robot.display_name)
+# @app.post('/test/advanced')
+# def advanced_test_post(robot: schemas.Robot):
+#     return crud.convert_name(robot.display_name)
+
+@app.websocket('/ws')
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    while True:
+        data = await websocket.receive_text()
+        await websocket.send_text(f'Message text was: {data}')
