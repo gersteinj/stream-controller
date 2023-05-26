@@ -39,6 +39,10 @@ def read_robot(robot_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Robot Not Found :(")
     return db_robot
 
+@app.get('/wc/all')
+def read_weight_class_names():
+    return [weight_class for weight_class in WeightsEnum]
+
 @app.get('/wc/{weight_class}')
 def read_weight_class(weight_class: WeightsEnum, db: Session = Depends(get_db)):
     robots = crud.get_robots_by_weight_class(db, weight_class=weight_class)
@@ -58,3 +62,7 @@ def test_page(say: str | None = None):
 @app.post('/test/')
 def test_post():
     return {'message': 'post request received'}
+
+@app.post('/test/advanced')
+def advanced_test_post(robot: schemas.Robot):
+    return crud.convert_name(robot.display_name)
