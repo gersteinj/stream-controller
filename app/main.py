@@ -1,4 +1,5 @@
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 
 from . import crud, models, schemas
@@ -7,6 +8,8 @@ from .database import SessionLocal, engine
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+app.mount('/static', StaticFiles(directory='static', html=True), name='static')
 
 # Dependency
 def get_db():
@@ -44,3 +47,13 @@ def read_weight_class(weight_class: str, db: Session = Depends(get_db)):
 def homepage():
     print('get request reached the home page')
     return 'Hello'
+
+@app.get('/test/')
+def test_page(say: str | None = None):
+    if say:
+        return {'message': say}
+    return {'message': 'empty get request received'}
+
+@app.post('/test/')
+def test_post():
+    return {'message': 'post request received'}
