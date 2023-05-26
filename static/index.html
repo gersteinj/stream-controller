@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,50 +11,11 @@
     />
     <title>Document</title>
 </head>
-
 <body>
-    <h1>View Robots</h1>
-    <button id="fetch-data">Fetch Data</button>
-    <table id="robot-view">
-        <thead>
-            <tr>
-                <th>Display Name</th>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Weight Class</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-        <caption>All Registered Robots</caption>
-    </table>
-</body>
-
-<script>
-    const btn = document.getElementById('fetch-data');
-    const table = document.getElementById('robot-view');
-    const tbody = document.getElementsByTagName('tbody')[0];
-    console.log(table.createTHead());
+    <h1>Web Interface</h1>
+    <ul>
+        <li><a href="view-robots.html">View All Robots</a></li>
+    </ul>
     
-    btn.addEventListener('click', () => {
-        console.log('Fetch me some data!');
-        let robots = fetch('http://localhost:8000/robots/')
-            .then(response => response.json())
-            .then(json => {
-                tbody.innerHTML = '';
-                json.forEach(robot => {
-                    console.log(robot);
-                    let row = tbody.insertRow(-1);
-                    let cell0 = row.insertCell(0);
-                    cell0.innerText = robot.display_name;
-                    let cell1 = row.insertCell(1);
-                    cell1.innerText = robot.id;
-                    let cell2 = row.insertCell(2);
-                    cell2.innerText = robot.name;
-                    let cell3 = row.insertCell(3);
-                    cell3.innerText = robot.weight_class;
-                })
-            });
-        
-    });
-</script>
+</body>
 </html>
