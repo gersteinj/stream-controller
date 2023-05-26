@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from . import models, schemas
+from .myEnums import WeightsEnum
 
 ###############################################
 #                                             #
@@ -36,7 +37,7 @@ def get_robot_by_name(db: Session, name: str):
 def get_robots(db: Session, skip: int=0, limit: int=100):
     return db.query(models.Robot).offset(skip).limit(limit).all()
 
-def get_robots_by_weight_class(db: Session, weight_class: str):
+def get_robots_by_weight_class(db: Session, weight_class: WeightsEnum):
     return db.query(models.Robot).filter(models.Robot.weight_class == weight_class).all()
 
 ###############################################

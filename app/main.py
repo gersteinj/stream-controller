@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from . import crud, models, schemas
 from .database import SessionLocal, engine
+from .myEnums import WeightsEnum
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -39,7 +40,7 @@ def read_robot(robot_id: int, db: Session = Depends(get_db)):
     return db_robot
 
 @app.get('/wc/{weight_class}')
-def read_weight_class(weight_class: str, db: Session = Depends(get_db)):
+def read_weight_class(weight_class: WeightsEnum, db: Session = Depends(get_db)):
     robots = crud.get_robots_by_weight_class(db, weight_class=weight_class)
     return robots
 
