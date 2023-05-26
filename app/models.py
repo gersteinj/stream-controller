@@ -11,5 +11,5 @@ class Robot(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
     display_name = Column(String)
-    weight_class = Column(Enum(WeightsEnum))
+    weight = Column(Enum(WeightsEnum))
     

@@ -13,7 +13,7 @@
     <h1>Create a Robot</h1>
     <label for="name-input">Robot's Display Name</label>
     <input type="text" id="name-input">
-    <select name="weight-class" id="weight-class">
+    <select name="weight" id="weight">
         <option value="ANT">Antweight</option>
         <option value="PLANT">Plastic Ant</option>
         <option value="BEETLE">Beetleweight</option>
@@ -22,7 +22,7 @@
 </body>
 
 <script type="module">
-    const dropdown = document.getElementById('weight-class');
+    const dropdown = document.getElementById('weight');
     const nameInput = document.getElementById('name-input');
     const btn = document.getElementById('create');
 
@@ -35,7 +35,7 @@
             },
             body: JSON.stringify({
                 display_name: nameInput.value,
-                weight_class: dropdown.value
+                weight: dropdown.value
             })
         })
             .then(response => response.json())

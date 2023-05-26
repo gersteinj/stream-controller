@@ -9,7 +9,7 @@ class Robot(BaseModel):
     id: int | None
     display_name: str
     name: str | None
-    weight_class: WeightsEnum
+    weight: WeightsEnum
 
     class Config:
         orm_mode = True
