@@ -3,6 +3,7 @@
 {% block content %}
     <h1>Display Test</h1>
     <p>Displays everything. Primarily intended for troubleshooting purposes</p>
+    <button id="update-all">Update</button>
     <h2>Current Match</h2>
     <p><span id="weight">Weight Class</span>  <span id="red-bot">Red</span>   <span id="blue-bot">Blue</span></p>
 
@@ -18,5 +19,12 @@
 {% endblock %}
 
 {% block scripts %}
-    
+    <script type="module">
+        import { displayMatchInfo } from '/static/scripts/utilities.js';
+        
+        displayMatchInfo();
+
+        document.getElementById('update-all').addEventListener('click', () => displayMatchInfo());
+        
+    </script>
 {% endblock %}

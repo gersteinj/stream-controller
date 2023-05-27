@@ -1,1 +1,0 @@
-console.log('hi from the test script');
