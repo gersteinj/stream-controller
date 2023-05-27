@@ -9,11 +9,14 @@
         <li><a href="{{ url_for('control_panel_view') }}">Control Panel</a></li>
         <li><a href="{{ url_for('all_robots_view') }}">View All Robots</a></li>
         <li><a href="{{ url_for('create_robot_view' ) }}">Create a Robot</a></li>
-        <li><a href="{{ url_for( 'display_view' ) }}">Display Test</a></li>
-        
+        <li><a href="{{ url_for( 'display_view' ) }}">Display Test</a></li>        
     </ul>
+
+    
 {% endblock %}
 
 {% block scripts %}
+<!-- <script src="static/scripts/test.js"></script> -->
+<script src="{{ url_for('static', path='/scripts/test.js' ) }}"></script>
     
 {% endblock %}

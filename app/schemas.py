@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from .myEnums import WeightsEnum
+from .myEnums import Weights
 
 class Robot(BaseModel):
     # Making id type int or none allows for not providing an id value
@@ -9,13 +9,13 @@ class Robot(BaseModel):
     id: int | None
     display_name: str
     name: str | None
-    weight: WeightsEnum
+    weight: Weights
 
     class Config:
         orm_mode = True
 
 class MatchIn(BaseModel):
-    weight: WeightsEnum
+    weight: Weights
     red_bot: str
     blue_bot: str
 
@@ -24,7 +24,7 @@ class MatchIn(BaseModel):
 
 class Match(BaseModel):
     # This is not meant to carry over from session to session, so I'm not creating a matching SQLAlchemy model for this one
-    weight: WeightsEnum
+    weight: Weights
     red_bot: Robot
     blue_bot: Robot
 

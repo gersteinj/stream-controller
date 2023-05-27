@@ -6,14 +6,14 @@ from sqlalchemy.orm import Session
 
 from . import crud, models, schemas
 from .database import SessionLocal, engine
-from .myEnums import WeightsEnum
+from .myEnums import Weights
 
 models.Base.metadata.create_all(bind=engine)
 current_match = None
 
 app = FastAPI()
 
-app.mount('/static', StaticFiles(directory='static', html=True), name='static')
+app.mount('/static', StaticFiles(directory='static'), name='static')
 templates = Jinja2Templates(directory='templates')
 
 # Dependency
@@ -45,10 +45,10 @@ def read_robot(robot_id: int, db: Session = Depends(get_db)):
 
 @app.get('/weight/')
 def read_weights():
-    return [weight for weight in WeightsEnum]
+    return [weight for weight in Weights]
 
 @app.get('/weight/{weight}')
-def read_robots_by_weight(weight: WeightsEnum, db: Session = Depends(get_db)):
+def read_robots_by_weight(weight: Weights, db: Session = Depends(get_db)):
     robots = crud.get_robots_by_weight(db, weight=weight)
     return robots
 

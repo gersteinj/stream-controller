@@ -1,5 +1,5 @@
 from enum import Enum
-class WeightsEnum(Enum):
+class Weights(Enum):
     ANT = 'ANT'
     PLANT = 'PLANT'
     BEETLE = 'BEETLE'

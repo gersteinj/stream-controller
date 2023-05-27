@@ -2,7 +2,7 @@ from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Enum
 from sqlalchemy.orm import relationship
 
 from .database import Base
-from .myEnums import WeightsEnum
+from .myEnums import Weights
 
 
 class Robot(Base):
@@ -11,5 +11,5 @@ class Robot(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
     display_name = Column(String)
-    weight = Column(Enum(WeightsEnum))
+    weight = Column(Enum(Weights))
     
