@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/sakura.css/css/sakura-pink.css"
-      type="text/css"
-    />
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura-pink.css" type="text/css" />
     <title>Control Panel</title>
 </head>
+
 <body>
     <h1>Control Panel</h1>
     <div>
@@ -19,33 +17,43 @@
         <button data-weight="BEETLE">Beetleweight</button>
     </div>
     <div>
-        <select name="red-robot-select" id="red-robot-select"></select>
-        <select name="blue-robot-select" id="blue-robot-select"></select>
+        <select data-select="red" name="red-robot-select" id="red-robot-select"></select>
+        <select data-select="blue" name="blue-robot-select" id="blue-robot-select"></select>
     </div>
-    <div>
-        <button id="temp">Who's active?</button>
-    </div>
+
 </body>
 
 <script>
-    let currentBots = [];
-    
-    let weightBtns = document.querySelectorAll('[data-weight]');
+    const robotDropdowns = document.querySelectorAll('[data-select]');
+    const weightBtns = document.querySelectorAll('[data-weight]');
+
+    const optionSets = {}
+
+
     weightBtns.forEach(btn => {
+        // populate the option sets
+        let weight = btn.dataset.weight;
+        optionSets[weight] = '';
+        let bots = fetch(`http://localhost:8000/weight/${weight}`)
+            .then(response => response.json())
+            .then(json => {
+                json.forEach(bot => {
+                    let opt = `<option value="${bot.name}">${bot.display_name}</option>`
+                    optionSets[weight] += opt;
+                })
+            })
+            .finally( () => console.log(optionSets));
+        
+        // create event listeners on the weight buttons to populate the dropdowns with the auto-generated options
         btn.addEventListener('click', () => {
             let weight = btn.dataset.weight;
-            fetch(`http://localhost:8000/weight/${weight}`)
-            .then(response => response.json())
-            .then(json => currentBots = json)   // save the current bots in currentBots in case I need it, might get rid of this
-            .then(json => json.forEach(bot => console.log(bot)));
-            // .then(json => console.log(json));
-        })
-    })
+            robotDropdowns.forEach(dropdown => {
+                dropdown.innerHTML = optionSets[weight];
+            })
+        });
+    });
 
-    document.getElementById('temp').addEventListener('click', () => {
-        console.log(currentBots);
-    })
 
-    
 </script>
+
 </html>
