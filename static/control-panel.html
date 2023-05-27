@@ -23,6 +23,11 @@
     <div>
         <button id="send-match-data">Send</button>
     </div>
+    <div>
+        <h2>Current Match</h2>
+        <div id="current-match"></div>
+
+    </div>
 
 </body>
 
@@ -72,7 +77,10 @@
             },
             body: message
         }).then(response => response.json())
-        .then(json => console.log(json));
+        .then(json => {
+            document.getElementById('current-match').innerHTML = `<p>Weight Class: ${json.weight}</p><p>Red Robot: ${json.red_bot.display_name}</p><p>Blue Robot: ${json.blue_bot.display_name}</p>`;
+            console.log(json)
+        });
         
     });
 
