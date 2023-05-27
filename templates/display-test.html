@@ -1,0 +1,24 @@
+{% extends 'layouts/ui-base.html' %}
+
+{% block content %}
+    <h1>Display Test</h1>
+    <p>Displays everything. Primarily intended for troubleshooting purposes</p>
+    <h2>Current Match</h2>
+    <p><span id="weight">Weight Class</span>  <span id="red-bot">Red</span>   <span id="blue-bot">Blue</span></p>
+
+    <style>
+        #red-bot {
+            text-shadow: 0 0 3px red, 0 0 5px red;
+        }
+        #blue-bot {
+            text-shadow: 0 0 3px #59f, 0 0 5px #59f;
+        }
+
+
+    </style>
+
+{% endblock %}
+
+{% block scripts %}
+    
+{% endblock %}

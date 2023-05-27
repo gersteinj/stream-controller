@@ -1,4 +1,4 @@
-{% extends 'ui-base.html' %}
+{% extends 'layouts/ui-base.html' %}
 
 {% block content %}
     <h1>Home</h1>
@@ -9,6 +9,7 @@
         <li><a href="{{ url_for('control_panel_view') }}">Control Panel</a></li>
         <li><a href="{{ url_for('all_robots_view') }}">View All Robots</a></li>
         <li><a href="{{ url_for('create_robot_view' ) }}">Create a Robot</a></li>
+        <li><a href="{{ url_for( 'display_view' ) }}">Display Test</a></li>
         
     </ul>
 {% endblock %}

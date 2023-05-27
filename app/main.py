@@ -86,3 +86,7 @@ def all_robots_view(request: Request):
 @app.get('/view/create', response_class=HTMLResponse)
 def create_robot_view(request: Request):
     return templates.TemplateResponse('create-robot.html', {'request': request})
+
+@app.get('/view/display', response_class=HTMLResponse)
+def display_view(request: Request):
+    return templates.TemplateResponse('display-test.html', {'request': request})
