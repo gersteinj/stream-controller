@@ -16,6 +16,11 @@
 {% endblock %}
 
 {% block scripts %}
-<!-- <script src="{{ url_for('static', path='/scripts/test.js' ) }}"></script> -->
+<!-- <script type="module">
+    import { getRobotList } from '/static/scripts/utilities.js';
+    getRobotList().then(robot => {
+        console.log(robot);
+    })
+</script> -->
     
 {% endblock %}

@@ -36,6 +36,11 @@ def read_robots(skip: int=0, limit: int=50, db: Session = Depends(get_db)):
     robots = crud.get_robots(db, skip=skip, limit=limit)
     return robots
 
+@app.get('/robots/{weight}', response_model=list[schemas.Robot])
+def read_robots_by_weight(weight: Weights, db: Session = Depends(get_db)):
+    robots = crud.get_robots_by_weight(db, weight=weight)
+    return robots
+
 @app.get('/robots/{robot_id}', response_model=schemas.Robot)
 def read_robot(robot_id: int, db: Session = Depends(get_db)):
     db_robot = crud.get_robot(db, robot_id=robot_id)
@@ -46,11 +51,6 @@ def read_robot(robot_id: int, db: Session = Depends(get_db)):
 @app.get('/weight/')
 def read_weights():
     return [weight for weight in Weights]
-
-@app.get('/weight/{weight}')
-def read_robots_by_weight(weight: Weights, db: Session = Depends(get_db)):
-    robots = crud.get_robots_by_weight(db, weight=weight)
-    return robots
 
 @app.get('/', response_class=HTMLResponse)
 def homepage(request: Request):

@@ -13,25 +13,13 @@
 {% endblock %}
 
 {% block scripts %}
-<script>
+<script type="module">
+    import { postNewRobot } from '/static/scripts/utilities.js';
     const dropdown = document.getElementById('weight');
     const nameInput = document.getElementById('name');
     const btn = document.getElementById('create');
 
-    btn.addEventListener('click', () => {
-        fetch('http://localhost:8000/robots/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify({
-                display_name: nameInput.value,
-                weight: dropdown.value
-            })
-        })
-            .then(response => response.json())
-            .then(json => console.log(json));
-    })
+    btn.addEventListener('click', () => postNewRobot(nameInput.value, dropdown.value));
 </script>
 
 {% endblock %}
