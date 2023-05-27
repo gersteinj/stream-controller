@@ -11,6 +11,8 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+current_match = None
+
 app.mount('/static', StaticFiles(directory='static', html=True), name='static')
 
 # Dependency
@@ -54,19 +56,17 @@ def homepage():
     print('get request reached the home page')
     return 'Hello'
 
-# @app.get('/test/')
-# def test_page(say: str | None = None):
-#     if say:
-#         return {'message': say}
-#     return {'message': 'empty get request received'}
+@app.post('/currentmatch', response_model=schemas.Match)
+def post_current_match(match_in: schemas.MatchIn, db: Session = Depends(get_db)):
+    global current_match
+    match = crud.create_match(db=db, match_in=match_in)
+    current_match = match
+    return match
 
-# @app.post('/test/')
-# def test_post():
-#     return {'message': 'post request received'}
-
-# @app.post('/test/advanced')
-# def advanced_test_post(robot: schemas.Robot):
-#     return crud.convert_name(robot.display_name)
+@app.get('/currentmatch', response_model=schemas.Match)
+def read_current_match():
+    global current_match
+    return current_match
 
 @app.websocket('/ws')
 async def websocket_endpoint(websocket: WebSocket):

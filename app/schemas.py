@@ -13,3 +13,20 @@ class Robot(BaseModel):
 
     class Config:
         orm_mode = True
+
+class MatchIn(BaseModel):
+    weight: WeightsEnum
+    red_bot: str
+    blue_bot: str
+
+    class Config:
+        orm_mode = True
+
+class Match(BaseModel):
+    # This is not meant to carry over from session to session, so I'm not creating a matching SQLAlchemy model for this one
+    weight: WeightsEnum
+    red_bot: Robot
+    blue_bot: Robot
+
+    class Config:
+        orm_mode = True

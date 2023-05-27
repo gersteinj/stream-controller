@@ -61,10 +61,19 @@
     sendBtn.addEventListener('click', () => {
         let message = JSON.stringify({
             weight: activeWeight,
-            redBot: document.getElementById('red-robot-select').value,
-            blueBot: document.getElementById('blue-robot-select').value,
+            red_bot: document.getElementById('red-robot-select').value,
+            blue_bot: document.getElementById('blue-robot-select').value,
         });
         console.log(message);
+        fetch('http://localhost:8000/currentmatch', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: message
+        }).then(response => response.json())
+        .then(json => console.log(json));
+        
     });
 
 
