@@ -2,6 +2,7 @@
 
 {% block content %}
 <h1>Control Panel</h1>
+
 <div>
     <button data-weight="ANT">Antweight</button>
     <button data-weight="PLANT">Plastic Ant</button>
@@ -14,19 +15,17 @@
 <div>
     <button id="send-match-data">Set Match</button>
 </div>
-<div>
-    <h2>Current Match</h2>
-    <div id="current-match"></div>
-</div>
+
 {% endblock %}
 
 {% block scripts %}
 <script type="module">
-    import { getRobotList } from '/static/scripts/utilities.js';
+    import { getRobotList, displayMatchInfo } from '/static/scripts/utilities.js';
 
     const robotDropdowns = document.querySelectorAll('[data-select]');
     const weightBtns = document.querySelectorAll('[data-weight]');
     const sendBtn = document.getElementById('send-match-data');
+
     let activeWeight = null;
 
     const optionSets = {}
@@ -60,18 +59,15 @@
             red_bot: document.getElementById('red-robot-select').value,
             blue_bot: document.getElementById('blue-robot-select').value,
         });
-        console.log(message);
+        // console.log(message);
         fetch('http://localhost:8000/currentmatch', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
             body: message
-        }).then(response => response.json())
-            .then(json => {
-                document.getElementById('current-match').innerHTML = `<p>Weight Class: ${json.weight}</p><p>Red Robot: ${json.red_bot.display_name}</p><p>Blue Robot: ${json.blue_bot.display_name}</p>`;
-                console.log(json)
-            });
+        }).then(response => response.json()).then(json => console.log(json));
+
 
     });
 </script>
