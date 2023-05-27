@@ -1,36 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'ui-base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura-pink.css" type="text/css" />
-    <title>Control Panel</title>
-</head>
+{% block content %}
+<h1>Control Panel</h1>
+<div>
+    <button data-weight="ANT">Antweight</button>
+    <button data-weight="PLANT">Plastic Ant</button>
+    <button data-weight="BEETLE">Beetleweight</button>
+</div>
+<div>
+    <select data-select="red" name="red-robot-select" id="red-robot-select"></select>
+    <select data-select="blue" name="blue-robot-select" id="blue-robot-select"></select>
+</div>
+<div>
+    <button id="send-match-data">Set Match</button>
+</div>
+<div>
+    <h2>Current Match</h2>
+    <div id="current-match"></div>
+</div>
+{% endblock %}
 
-<body>
-    <h1>Control Panel</h1>
-    <div>
-        <button data-weight="ANT">Antweight</button>
-        <button data-weight="PLANT">Plastic Ant</button>
-        <button data-weight="BEETLE">Beetleweight</button>
-    </div>
-    <div>
-        <select data-select="red" name="red-robot-select" id="red-robot-select"></select>
-        <select data-select="blue" name="blue-robot-select" id="blue-robot-select"></select>
-    </div>
-    <div>
-        <button id="send-match-data">Send</button>
-    </div>
-    <div>
-        <h2>Current Match</h2>
-        <div id="current-match"></div>
-
-    </div>
-
-</body>
-
+{% block scripts %}
 <script>
     const robotDropdowns = document.querySelectorAll('[data-select]');
     const weightBtns = document.querySelectorAll('[data-weight]');
@@ -51,8 +41,8 @@
                     optionSets[weight] += opt;
                 })
             })
-            .finally( () => console.log(optionSets));
-        
+            .finally(() => console.log(optionSets));
+
         // create event listeners on the weight buttons to populate the dropdowns with the auto-generated options
         btn.addEventListener('click', () => {
             let weight = btn.dataset.weight;
@@ -77,14 +67,11 @@
             },
             body: message
         }).then(response => response.json())
-        .then(json => {
-            document.getElementById('current-match').innerHTML = `<p>Weight Class: ${json.weight}</p><p>Red Robot: ${json.red_bot.display_name}</p><p>Blue Robot: ${json.blue_bot.display_name}</p>`;
-            console.log(json)
-        });
-        
+            .then(json => {
+                document.getElementById('current-match').innerHTML = `<p>Weight Class: ${json.weight}</p><p>Red Robot: ${json.red_bot.display_name}</p><p>Blue Robot: ${json.blue_bot.display_name}</p>`;
+                console.log(json)
+            });
+
     });
-
-
 </script>
-
-</html>
+{% endblock %}

@@ -1,6 +1,7 @@
-from fastapi import Depends, FastAPI, HTTPException, WebSocket
+from fastapi import Depends, FastAPI, HTTPException, WebSocket, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
 from . import crud, models, schemas
@@ -8,12 +9,12 @@ from .database import SessionLocal, engine
 from .myEnums import WeightsEnum
 
 models.Base.metadata.create_all(bind=engine)
+current_match = None
 
 app = FastAPI()
 
-current_match = None
-
 app.mount('/static', StaticFiles(directory='static', html=True), name='static')
+templates = Jinja2Templates(directory='templates')
 
 # Dependency
 def get_db():
@@ -51,10 +52,9 @@ def read_robots_by_weight(weight: WeightsEnum, db: Session = Depends(get_db)):
     robots = crud.get_robots_by_weight(db, weight=weight)
     return robots
 
-@app.get('/')
-def homepage():
-    print('get request reached the home page')
-    return 'Hello'
+@app.get('/', response_class=HTMLResponse)
+def homepage(request: Request):
+    return templates.TemplateResponse('index.html', {'request': request})
 
 @app.post('/currentmatch', response_model=schemas.Match)
 def post_current_match(match_in: schemas.MatchIn, db: Session = Depends(get_db)):
@@ -74,3 +74,15 @@ async def websocket_endpoint(websocket: WebSocket):
     while True:
         data = await websocket.receive_text()
         await websocket.send_text(f'Message text was: {data}')
+
+@app.get('/view/controls', response_class=HTMLResponse)
+def control_panel_view(request: Request):
+    return templates.TemplateResponse('control-panel.html', {'request': request})
+
+@app.get('/view/robots', response_class=HTMLResponse)
+def all_robots_view(request: Request):
+    return templates.TemplateResponse('view-robots.html', {'request': request})
+
+@app.get('/view/create', response_class=HTMLResponse)
+def create_robot_view(request: Request):
+    return templates.TemplateResponse('create-robot.html', {'request': request})

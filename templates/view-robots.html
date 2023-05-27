@@ -1,0 +1,36 @@
+{% extends 'ui-base.html' %}
+
+{% block content %}
+    <h1>View Robots</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Display Name</th>
+                <th>Name</th>
+                <th>Weight</th>
+                <th>ID</th>
+            </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+    </table>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        const tbody = document.getElementById('table-body');
+        window.onload = () => {
+            fetch('http://localhost:8000/robots/')
+            .then(response => response.json())
+            .then(json => {
+                json.forEach(robot => {
+                    console.log(robot);
+                    let row = tbody.insertRow(-1);
+                    [robot.display_name, robot.name, robot.weight, robot.id].forEach(item => {
+                        row.innerHTML += `<td>${item}</td>`;
+                    })
+                    console.log(row);
+                });
+            })
+        }
+    </script>
+{% endblock %}
