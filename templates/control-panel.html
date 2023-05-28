@@ -3,18 +3,29 @@
 {% block content %}
 <h1>Control Panel</h1>
 
-<div>
-    <button data-weight="ANT">Antweight</button>
-    <button data-weight="PLANT">Plastic Ant</button>
-    <button data-weight="BEETLE">Beetleweight</button>
+<div id="match-controls">
+    <h2>Set Current Match</h2>
+    <div>
+        <button data-weight="ANT">Antweight</button>
+        <button data-weight="PLANT">Plastic Ant</button>
+        <button data-weight="BEETLE">Beetleweight</button>
+    </div>
+    <div>
+
+        <select data-select="red" name="red-robot-select" id="red-robot-select"></select>
+        <select data-select="blue" name="blue-robot-select" id="blue-robot-select"></select>
+        <button id="send-match-data">Set Match</button>
+    </div>
 </div>
-<div>
-    <select data-select="red" name="red-robot-select" id="red-robot-select"></select>
-    <select data-select="blue" name="blue-robot-select" id="blue-robot-select"></select>
+
+<div id="time-controls">
+    <h2>Time Controls</h2>
+    <button id="reset-time">Reset Timer</button>
+    <label for="time-input">Seconds to Add</label>
+    <input type="text" id="time-input">
+    <button id="increment-time">Add Time</button>
 </div>
-<div>
-    <button id="send-match-data">Set Match</button>
-</div>
+
 
 {% endblock %}
 
