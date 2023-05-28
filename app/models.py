@@ -18,4 +18,6 @@ class Match(Base):
     id = Column(Integer, primary_key=True, index=True)
     weight = Column(Enum(Weights))
     red_bot = Column(Integer, ForeignKey('robots.id'))
+    red_display_name = Column(String)
     blue_bot = Column(Integer, ForeignKey('robots.id'))
+    blue_display_name = Column(String)

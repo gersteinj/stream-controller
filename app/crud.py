@@ -60,9 +60,10 @@ def create_robot(db: Session, robot: schemas.Robot):
 ###############################################
 
 def create_match(db: Session, match_in: schemas.MatchIn):
-    blue_bot = get_robot_by_name(db=db, name=match_in.blue_bot).id
-    red_bot = get_robot_by_name(db=db, name=match_in.red_bot).id
-    db_match = models.Match(weight=match_in.weight, red_bot=red_bot, blue_bot=blue_bot)
+    
+    blue_bot = get_robot_by_name(db=db, name=match_in.blue_bot)
+    red_bot = get_robot_by_name(db=db, name=match_in.red_bot)
+    db_match = models.Match(weight=match_in.weight, red_bot=red_bot.id, red_display_name=red_bot.display_name, blue_bot=blue_bot.id, blue_display_name=blue_bot.display_name)
     db.add(db_match)
     db.commit()
     db.refresh(db_match)

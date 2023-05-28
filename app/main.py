@@ -30,6 +30,7 @@ class ConnectionManager:
 
     async def connect(self, websocket: WebSocket):
         await websocket.accept()
+        print('New connection')
         self.active_connections.append(websocket)
     
     def disconnect(self, websocket: WebSocket):
@@ -79,7 +80,6 @@ def read_matches(db: Session = Depends(get_db)):
 @app.post('/matches/', response_model=schemas.Match)
 async def create_match(match_in: schemas.MatchIn, db: Session = Depends(get_db)):
     match = crud.create_match(db=db, match_in=match_in)
-    await manager.broadcast('refresh')
     return match
 
 @app.get('/matches/latest', response_model=schemas.Match)
@@ -92,8 +92,6 @@ async def websocket_endpoint(purpose: str | None, websocket: WebSocket):
     try:
         while True:
             data = await websocket.receive_text()
-            if purpose:
-                print(purpose)
             await manager.send_personal_message(f'You wrote: {data}', websocket)
             await manager.broadcast(data)
     except WebSocketDisconnect:
