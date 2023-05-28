@@ -55,10 +55,25 @@ def create_robot(db: Session, robot: schemas.Robot):
 
 ###############################################
 #                                             #
-#                Create Match                 #
+#                   Matches                   #
 #                                             #
 ###############################################
 
 def create_match(db: Session, match_in: schemas.MatchIn):
-    match = schemas.Match(weight=match_in.weight, blue_bot=get_robot_by_name(db=db, name=match_in.blue_bot), red_bot = get_robot_by_name(db=db, name=match_in.red_bot))
-    return match
+    blue_bot = get_robot_by_name(db=db, name=match_in.blue_bot).id
+    red_bot = get_robot_by_name(db=db, name=match_in.red_bot).id
+    db_match = models.Match(weight=match_in.weight, red_bot=red_bot, blue_bot=blue_bot)
+    db.add(db_match)
+    db.commit()
+    db.refresh(db_match)
+    return db_match
+
+def get_matches(db: Session):
+    return db.query(models.Match).all()
+
+def get_latest_match(db: Session):
+    # return db.query(models.Match).all()[-1]
+    return db.query(models.Match).order_by(models.Match.id.desc()).first()
+
+def get_match_by_id(db: Session, match_id: int):
+    return db.query(models.Match).filter(models.Match.id == match_id).first()

@@ -23,10 +23,10 @@ class MatchIn(BaseModel):
         orm_mode = True
 
 class Match(BaseModel):
-    # This is not meant to carry over from session to session, so I'm not creating a matching SQLAlchemy model for this one
+    id: int | None
     weight: Weights
-    red_bot: Robot
-    blue_bot: Robot
+    red_bot: int
+    blue_bot: int
 
     class Config:
         orm_mode = True

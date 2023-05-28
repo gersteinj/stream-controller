@@ -9,7 +9,6 @@ from .database import SessionLocal, engine
 from .myEnums import Weights
 
 models.Base.metadata.create_all(bind=engine)
-current_match = None
 
 app = FastAPI()
 
@@ -73,22 +72,19 @@ def read_robot(robot_id: int, db: Session = Depends(get_db)):
 def read_weights():
     return [weight for weight in Weights]
 
-@app.get('/', response_class=HTMLResponse)
-def homepage(request: Request):
-    return templates.TemplateResponse('index.html', {'request': request})
+@app.get('/matches/', response_model=list[schemas.Match])
+def read_matches(db: Session = Depends(get_db)):
+    return crud.get_matches(db=db)
 
-@app.post('/currentmatch', response_model=schemas.Match)
-async def post_current_match(match_in: schemas.MatchIn, db: Session = Depends(get_db)):
-    global current_match
+@app.post('/matches/create', response_model=schemas.Match)
+async def create_match(match_in: schemas.MatchIn, db: Session = Depends(get_db)):
     match = crud.create_match(db=db, match_in=match_in)
-    current_match = match
     await manager.broadcast('refresh')
     return match
 
-@app.get('/currentmatch', response_model=schemas.Match)
-def read_current_match():
-    global current_match
-    return current_match
+@app.get('/matches/latest', response_model=schemas.Match)
+def get_latest_match(db: Session = Depends(get_db)):
+    return crud.get_latest_match(db=db)
 
 @app.websocket('/ws/{purpose}')
 async def websocket_endpoint(purpose: str | None, websocket: WebSocket):
@@ -103,6 +99,10 @@ async def websocket_endpoint(purpose: str | None, websocket: WebSocket):
     except WebSocketDisconnect:
         manager.disconnect(websocket)
         await manager.broadcast('Somebody disconnected')
+
+@app.get('/', response_class=HTMLResponse)
+def homepage(request: Request):
+    return templates.TemplateResponse('index.html', {'request': request})
 
 @app.get('/view/controls', response_class=HTMLResponse)
 def control_panel_view(request: Request):

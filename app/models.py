@@ -12,4 +12,10 @@ class Robot(Base):
     name = Column(String, unique=True, index=True)
     display_name = Column(String)
     weight = Column(Enum(Weights))
-    
+
+class Match(Base):
+    __tablename__ = 'matches'
+    id = Column(Integer, primary_key=True, index=True)
+    weight = Column(Enum(Weights))
+    red_bot = Column(Integer, ForeignKey('robots.id'))
+    blue_bot = Column(Integer, ForeignKey('robots.id'))
