@@ -21,7 +21,14 @@
 {% block scripts %}
     <script type="module">
         import { displayMatchInfo } from '/static/scripts/utilities.js';
-        
+        const ws = new WebSocket('ws://localhost:8000/ws');
+        ws.onopen = (event) => {
+            console.log('connected');
+            ws.send("I'm connected!");
+        }
+        ws.onmessage = (event) => {
+            console.log(event.data);
+        }
         displayMatchInfo();
 
         document.getElementById('update-all').addEventListener('click', () => displayMatchInfo());

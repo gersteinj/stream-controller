@@ -32,7 +32,14 @@
 {% block scripts %}
 <script type="module">
     import { getRobotList, displayMatchInfo } from '/static/scripts/utilities.js';
-
+    const ws = new WebSocket('ws://localhost:8000/ws');
+    ws.onopen = (event) => {
+        console.log('connected');
+        ws.send('control panel connected');
+    }
+    ws.onmessage = (event) => {
+        console.log(event.data);
+    }
     const robotDropdowns = document.querySelectorAll('[data-select]');
     const weightBtns = document.querySelectorAll('[data-weight]');
     const sendBtn = document.getElementById('send-match-data');
