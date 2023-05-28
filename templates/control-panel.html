@@ -32,9 +32,8 @@
 {% block scripts %}
 <script type="module">
     import { getRobotList, displayMatchInfo } from '/static/scripts/utilities.js';
-    const ws = new WebSocket('ws://localhost:8000/ws');
+    const ws = new WebSocket('ws://localhost:8000/ws/controls');
     ws.onopen = (event) => {
-        console.log('connected');
         ws.send('control panel connected');
     }
     ws.onmessage = (event) => {
@@ -85,7 +84,6 @@
             },
             body: message
         }).then(response => response.json()).then(json => console.log(json));
-
 
     });
 </script>

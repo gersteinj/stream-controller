@@ -78,10 +78,11 @@ def homepage(request: Request):
     return templates.TemplateResponse('index.html', {'request': request})
 
 @app.post('/currentmatch', response_model=schemas.Match)
-def post_current_match(match_in: schemas.MatchIn, db: Session = Depends(get_db)):
+async def post_current_match(match_in: schemas.MatchIn, db: Session = Depends(get_db)):
     global current_match
     match = crud.create_match(db=db, match_in=match_in)
     current_match = match
+    await manager.broadcast('refresh')
     return match
 
 @app.get('/currentmatch', response_model=schemas.Match)
@@ -89,14 +90,14 @@ def read_current_match():
     global current_match
     return current_match
 
-@app.websocket('/ws')
-async def websocket_endpoint(websocket: WebSocket):
+@app.websocket('/ws/{purpose}')
+async def websocket_endpoint(purpose: str | None, websocket: WebSocket):
     await manager.connect(websocket)
     try:
         while True:
             data = await websocket.receive_text()
             await manager.send_personal_message(f'You wrote: {data}', websocket)
-            await manager.broadcast(f'Somebody said: {data}')
+            await manager.broadcast(data)
     except WebSocketDisconnect:
         manager.disconnect(websocket)
         await manager.broadcast('Somebody disconnected')
