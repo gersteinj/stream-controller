@@ -96,6 +96,8 @@ async def websocket_endpoint(purpose: str | None, websocket: WebSocket):
     try:
         while True:
             data = await websocket.receive_text()
+            if purpose:
+                print(purpose)
             await manager.send_personal_message(f'You wrote: {data}', websocket)
             await manager.broadcast(data)
     except WebSocketDisconnect:
