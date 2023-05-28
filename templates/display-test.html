@@ -7,7 +7,7 @@
 {% block content %}
     <h1>Display Test</h1>
     <p>Displays everything. Primarily intended for troubleshooting purposes</p>
-    <button id="update-all">Update</button>
+    <button id="update-all">Force Refresh</button>
     <h2>Current Match</h2>
     <p><span id="weight">Weight Class</span>  <span id="red-bot">Red</span>   <span id="blue-bot">Blue</span></p>
 
@@ -24,22 +24,20 @@
 
 {% block bodyScripts %}
     <script type="module">
-        import { displayMatchInfo } from '/static/scripts/utilities.js';
-        const ws = new WebSocket('ws://localhost:8000/ws/display');
-        ws.onopen = (event) => {
-            console.log('connected');
-            ws.send("Display test connected");
-        }
-        ws.onmessage = (event) => {
-            console.log(event.data);
-            if (event.data == 'refresh') {
-                console.log('time to refresh');
-                displayMatchInfo();
-            }
-        }
-        displayMatchInfo();
+        import { getLatestMatch } from '/static/scripts/utilities.js';
 
-        document.getElementById('update-all').addEventListener('click', () => displayMatchInfo());
+        const updateBtn = document.getElementById('update-all');
+        
+        updateBtn.addEventListener('click', () => {
+          getLatestMatch().then(match => {
+            console.log(match);
+            const { id, weight, red_display_name, blue_display_name, ...rest } = match;
+            console.log(`id: ${id}, weight: ${weight}, red: ${red_display_name}, blue: ${blue_display_name}`)
+            document.getElementById('weight').innerText = weight;
+            document.getElementById('red-bot').innerText = red_display_name;
+            document.getElementById('blue-bot').innerText = blue_display_name;
+          })
+        });
         
     </script>
 {% endblock bodyScripts %}

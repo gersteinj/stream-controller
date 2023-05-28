@@ -26,7 +26,9 @@ class Match(BaseModel):
     id: int | None
     weight: Weights
     red_bot: int
+    red_display_name: str
     blue_bot: int
+    blue_display_name: str
 
     class Config:
         orm_mode = True
