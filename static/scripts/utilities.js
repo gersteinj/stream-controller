@@ -1,15 +1,6 @@
-async function getMatchInfo() {
-    let response = await fetch('http://localhost:8000/currentmatch');
+export async function getLatestMatch() {
+    let response = await fetch('http://localhost:8000/matches/latest');
     return await response.json();
-}
-
-export function displayMatchInfo() {
-    getMatchInfo().then(match => {
-        console.log(`updating match`);
-        document.getElementById('weight').innerText = match.weight;
-        document.getElementById('red-bot').innerText = match.red_bot.display_name;
-        document.getElementById('blue-bot').innerText = match.blue_bot.display_name;
-    })
 }
 
 export async function getRobotList(weight = null) {
@@ -35,4 +26,19 @@ export async function postNewRobot(display_name, weight) {
     })
         .then(response => response.json())
         .then(json => console.log(json));
+}
+
+export async function postNewMatch(red_bot, blue_bot, weight) {
+    let message = JSON.stringify({
+        weight: weight,
+        red_bot: red_bot,
+        blue_bot: blue_bot
+    });
+    fetch('http://localhost:8000/matches/', {
+        method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: message
+    }).then(response => response.json()).then(json => console.log(json));
 }

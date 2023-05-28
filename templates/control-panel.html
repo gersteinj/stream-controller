@@ -35,21 +35,21 @@
 
 {% block bodyScripts %}
 <script type="module">
-    import { getRobotList, displayMatchInfo } from '/static/scripts/utilities.js';
-    const ws = new WebSocket('ws://localhost:8000/ws/controls');
-    ws.onopen = (event) => {
-        ws.send('control panel connected');
-    }
-    ws.onmessage = (event) => {
-        console.log(event.data);
-    }
-    const mqttClient = mqtt.connect('wss://test.mosquitto.org:8081')
-    mqttClient.on('connect', () => {
-        console.log('connected to mqtt');
-        mqttClient.subscribe('test/jg/#');
-        mqttClient.publish('test/jg/hello', 'Connected');
-    })
-    // console.log('client', mqttClient);
+    import { getRobotList, getLatestMatch, postNewMatch } from '/static/scripts/utilities.js';
+    // const ws = new WebSocket('ws://localhost:8000/ws/controls');
+    // ws.onopen = (event) => {
+    //     ws.send('control panel connected');
+    // }
+    // ws.onmessage = (event) => {
+    //     console.log(event.data);
+    // }
+    // const mqttClient = mqtt.connect('wss://test.mosquitto.org:8081')
+    // mqttClient.on('connect', () => {
+    //     console.log('connected to mqtt');
+    //     mqttClient.subscribe('test/jg/#');
+    //     mqttClient.publish('test/jg/hello', 'Connected');
+    // })
+
     const robotDropdowns = document.querySelectorAll('[data-select]');
     const weightBtns = document.querySelectorAll('[data-weight]');
     const sendBtn = document.getElementById('send-match-data');
@@ -82,20 +82,9 @@
     });
 
     sendBtn.addEventListener('click', () => {
-        let message = JSON.stringify({
-            weight: activeWeight,
-            red_bot: document.getElementById('red-robot-select').value,
-            blue_bot: document.getElementById('blue-robot-select').value,
-        });
-        // console.log(message);
-        fetch('http://localhost:8000/matches/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: message
-        }).then(response => response.json()).then(json => console.log(json));
-
+        let red = document.getElementById('red-robot-select').value;
+        let blue = document.getElementById('blue-robot-select').value;
+        postNewMatch(red, blue, activeWeight);
     });
 </script>
 {% endblock bodyScripts %}
