@@ -1,5 +1,9 @@
 {% extends 'layouts/ui-base.html' %}
 
+{% block headScripts %}
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+{% endblock headScripts %}
+
 {% block content %}
     <h1>Display Test</h1>
     <p>Displays everything. Primarily intended for troubleshooting purposes</p>
@@ -18,7 +22,7 @@
 
 {% endblock %}
 
-{% block scripts %}
+{% block bodyScripts %}
     <script type="module">
         import { displayMatchInfo } from '/static/scripts/utilities.js';
         const ws = new WebSocket('ws://localhost:8000/ws/display');
@@ -38,4 +42,4 @@
         document.getElementById('update-all').addEventListener('click', () => displayMatchInfo());
         
     </script>
-{% endblock %}
+{% endblock bodyScripts %}

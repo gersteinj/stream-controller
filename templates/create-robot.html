@@ -12,14 +12,15 @@
 </select>
 {% endblock %}
 
-{% block scripts %}
+{% block bodyScripts %}
+    
 <script type="module">
     import { postNewRobot } from '/static/scripts/utilities.js';
     const dropdown = document.getElementById('weight');
     const nameInput = document.getElementById('name');
     const btn = document.getElementById('create');
-
+    
     btn.addEventListener('click', () => postNewRobot(nameInput.value, dropdown.value));
 </script>
 
-{% endblock %}
+{% endblock bodyScripts %}

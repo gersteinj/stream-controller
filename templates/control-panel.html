@@ -1,5 +1,9 @@
 {% extends 'layouts/ui-base.html' %}
 
+{% block headScripts %}
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+{% endblock headScripts %}
+
 {% block content %}
 <h1>Control Panel</h1>
 
@@ -29,7 +33,7 @@
 
 {% endblock %}
 
-{% block scripts %}
+{% block bodyScripts %}
 <script type="module">
     import { getRobotList, displayMatchInfo } from '/static/scripts/utilities.js';
     const ws = new WebSocket('ws://localhost:8000/ws/controls');
@@ -39,6 +43,13 @@
     ws.onmessage = (event) => {
         console.log(event.data);
     }
+    const mqttClient = mqtt.connect('wss://test.mosquitto.org:8081')
+    mqttClient.on('connect', () => {
+        console.log('connected to mqtt');
+        mqttClient.subscribe('test/jg/#');
+        mqttClient.publish('test/jg/hello', 'Connected');
+    })
+    // console.log('client', mqttClient);
     const robotDropdowns = document.querySelectorAll('[data-select]');
     const weightBtns = document.querySelectorAll('[data-weight]');
     const sendBtn = document.getElementById('send-match-data');
@@ -87,4 +98,4 @@
 
     });
 </script>
-{% endblock %}
+{% endblock bodyScripts %}

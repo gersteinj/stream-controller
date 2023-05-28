@@ -106,16 +106,16 @@ async def websocket_endpoint(purpose: str | None, websocket: WebSocket):
 
 @app.get('/view/controls', response_class=HTMLResponse)
 def control_panel_view(request: Request):
-    return templates.TemplateResponse('control-panel.html', {'request': request})
+    return templates.TemplateResponse('control-panel.html', {'request': request, 'title': 'Control Panel'})
 
 @app.get('/view/robots', response_class=HTMLResponse)
 def all_robots_view(request: Request):
-    return templates.TemplateResponse('view-robots.html', {'request': request})
+    return templates.TemplateResponse('view-robots.html', {'request': request, 'title': 'View Robots'})
 
 @app.get('/view/create', response_class=HTMLResponse)
 def create_robot_view(request: Request):
-    return templates.TemplateResponse('create-robot.html', {'request': request})
+    return templates.TemplateResponse('create-robot.html', {'request': request, 'title': 'Create a Robot'})
 
 @app.get('/view/display', response_class=HTMLResponse)
 def display_view(request: Request):
-    return templates.TemplateResponse('display-test.html', {'request': request})
+    return templates.TemplateResponse('display-test.html', {'request': request, 'title': 'Test Display'})

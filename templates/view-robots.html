@@ -21,7 +21,7 @@
 </table>
 {% endblock %}
 
-{% block scripts %}
+{% block bodyScripts %}
 <script type="module">
     import { getRobotList } from '/static/scripts/utilities.js';
     const weightBtns = document.querySelectorAll('[data-weight]');
@@ -50,4 +50,4 @@
         buildTable(null, tbody);
     }
 </script>
-{% endblock %}
+{% endblock bodyScripts %}
