@@ -88,7 +88,7 @@
             blue_bot: document.getElementById('blue-robot-select').value,
         });
         // console.log(message);
-        fetch('http://localhost:8000/currentmatch', {
+        fetch('http://localhost:8000/matches/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'

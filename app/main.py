@@ -76,7 +76,7 @@ def read_weights():
 def read_matches(db: Session = Depends(get_db)):
     return crud.get_matches(db=db)
 
-@app.post('/matches/create', response_model=schemas.Match)
+@app.post('/matches/', response_model=schemas.Match)
 async def create_match(match_in: schemas.MatchIn, db: Session = Depends(get_db)):
     match = crud.create_match(db=db, match_in=match_in)
     await manager.broadcast('refresh')
