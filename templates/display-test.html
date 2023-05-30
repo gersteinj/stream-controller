@@ -28,16 +28,7 @@
 
         const updateBtn = document.getElementById('update-all');
         
-        updateBtn.addEventListener('click', () => {
-          getLatestMatch().then(match => {
-            console.log(match);
-            const { id, weight, red_display_name, blue_display_name, ...rest } = match;
-            console.log(`id: ${id}, weight: ${weight}, red: ${red_display_name}, blue: ${blue_display_name}`)
-            document.getElementById('weight').innerText = weight;
-            document.getElementById('red-bot').innerText = red_display_name;
-            document.getElementById('blue-bot').innerText = blue_display_name;
-          })
-        });
+        getLatestMatch().then( match => console.log(match));
         
     </script>
 {% endblock bodyScripts %}

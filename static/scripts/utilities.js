@@ -1,7 +1,3 @@
-export async function getLatestMatch() {
-    let response = await fetch('http://localhost:8000/matches/latest');
-    return await response.json();
-}
 
 export async function getRobotList(weight = null) {
     if (weight == 'ANT' || weight == 'PLANT' || weight == 'BEETLE') {
@@ -11,6 +7,13 @@ export async function getRobotList(weight = null) {
         let response = await fetch(`http://localhost:8000/robots`);
         return await response.json();
     }
+}
+
+// Everything above here has been checked //
+
+export async function getLatestMatch() {
+    let response = await fetch('http://localhost:8000/matches/latest');
+    return await response.json();
 }
 
 export async function postNewRobot(display_name, weight) {
