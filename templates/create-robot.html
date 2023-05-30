@@ -1,7 +1,9 @@
 {% extends 'layouts/ui-base.html' %}
 
 {% block content %}
+
 <h1>Create a Robot</h1>
+<p>For multi-robot input, separate with semi-colons.</p>
 <label for="name-input">Robot's Display Name</label>
 <input type="text" id="name">
 <button id="create">Create</button>
@@ -10,6 +12,7 @@
     <option value="PLANT">Plastic Ant</option>
     <option value="BEETLE">Beetleweight</option>
 </select>
+
 {% endblock %}
 
 {% block bodyScripts %}
@@ -19,8 +22,15 @@
     const dropdown = document.getElementById('weight');
     const nameInput = document.getElementById('name');
     const btn = document.getElementById('create');
+
+    function splitNames (nameString) {
+        return nameString.split(';').map( botString => botString.trim() ).filter(botString => botString.length > 0);
+    }
     
-    btn.addEventListener('click', () => postNewRobot(nameInput.value, dropdown.value));
+    btn.addEventListener('click', () => {
+        let weight = dropdown.value;
+        splitNames(nameInput.value).forEach( displayName => postNewRobot(displayName, weight));
+    });
 </script>
 
 {% endblock bodyScripts %}
