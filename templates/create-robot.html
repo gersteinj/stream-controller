@@ -3,7 +3,7 @@
 {% block content %}
 
 <h1>Create a Robot</h1>
-<p>For multi-robot input, separate with semi-colons.</p>
+<p>For multi-robot input, separate with commas</p>
 <label for="name-input">Robot's Display Name</label>
 <input type="text" id="name">
 <button id="create">Create</button>
@@ -24,12 +24,24 @@
     const btn = document.getElementById('create');
 
     function splitNames (nameString) {
-        return nameString.split(';').map( botString => botString.trim() ).filter(botString => botString.length > 0);
+        return nameString.split(',').map( botString => botString.trim() ).filter(botString => botString.length > 0);
+    }
+
+    function confirmNames (nameList) {
+        return confirm(`Correct?\n\n${nameList.join('\n')}`);
     }
     
     btn.addEventListener('click', () => {
         let weight = dropdown.value;
-        splitNames(nameInput.value).forEach( displayName => postNewRobot(displayName, weight));
+        // splitNames(nameInput.value).forEach( displayName => postNewRobot(displayName, weight));
+        let names = splitNames(nameInput.value);
+        if (names.length > 1) {
+            if ( !confirmNames(names) ) {
+                console.log('canceled');
+                return 'canceled';
+            }
+        }
+        names.forEach( displayName => postNewRobot(displayName, weight));
     });
 </script>
 
