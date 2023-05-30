@@ -27,27 +27,36 @@
     const weightBtns = document.querySelectorAll('[data-weight]');
     const tbody = document.getElementById('table-body');
 
-    function buildTable(weight, tableBody) {
-        tableBody.innerHTML = '';
-        getRobotList(weight).then(robotList => {
-            robotList.forEach((robot) => {
-                let row = tableBody.insertRow(-1);
-                [robot.display_name, robot.name, robot.weight, robot.id].forEach(item => {
-                    row.innerHTML += `<td>${item}</td>`;
-                })
-            })
-        })
-    };
-
-    weightBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            let weight = btn.dataset.weight;
-            buildTable(weight, tbody);
+    getRobotList().then( robotList => {
+        robotList.forEach( robot => {
+            { id, weight, display_name, name } = robot;
+            console.log(`ID: ${id}, weight: ${weight}, display name: ${display_name}, name: ${name}`);
         });
     })
+    
+    
 
-    window.onload = () => {
-        buildTable(null, tbody);
-    }
+    // function buildTable(weight, tableBody) {
+    //     tableBody.innerHTML = '';
+    //     getRobotList(weight).then(robotList => {
+    //         robotList.forEach((robot) => {
+    //             let row = tableBody.insertRow(-1);
+    //             [robot.display_name, robot.name, robot.weight, robot.id].forEach(item => {
+    //                 row.innerHTML += `<td>${item}</td>`;
+    //             })
+    //         })
+    //     })
+    // };
+
+    // weightBtns.forEach(btn => {
+    //     btn.addEventListener('click', () => {
+    //         let weight = btn.dataset.weight;
+    //         buildTable(weight, tbody);
+    //     });
+    // })
+
+    // window.onload = () => {
+    //     buildTable(null, tbody);
+    // }
 </script>
 {% endblock bodyScripts %}

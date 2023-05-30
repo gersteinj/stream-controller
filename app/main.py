@@ -46,7 +46,7 @@ class ConnectionManager:
 manager = ConnectionManager()
 
 @app.get('/robots/', response_model=list[schemas.Robot])
-def read_robots(skip: int=0, limit: int=50, db: Session = Depends(get_db)):
+def read_robots(skip: int=0, limit: int=500, db: Session = Depends(get_db)):
     robots = crud.get_robots(db, skip=skip, limit=limit)
     return robots
 
@@ -57,16 +57,16 @@ def read_robots_by_weight(weight: Weights, db: Session = Depends(get_db)):
 
 @app.post('/robots/', response_model=schemas.Robot)
 def create_robot(robot: schemas.Robot, db: Session = Depends(get_db)):
-    db_robot = crud.get_robot_by_display_name(db, display_name=robot.display_name)
-    if db_robot:
-        raise HTTPException(status_code=400, detail="Name already used!")
+    # db_robot = crud.get_robot_by_display_name(db, display_name=robot.display_name)
+    # if db_robot:
+    #     raise HTTPException(status_code=400, detail="Name already used!")
     return crud.create_robot(db=db, robot=robot)
 
 @app.get('/robots/id/{robot_id}', response_model=schemas.Robot)
-def read_robot(robot_id: int, db: Session = Depends(get_db)):
-    db_robot = crud.get_robot(db, robot_id=robot_id)
+def read_robot_by_id(robot_id: int, db: Session = Depends(get_db)):
+    db_robot = crud.get_robot_by_id(db, robot_id=robot_id)
     if db_robot is None:
-        raise HTTPException(status_code=404, detail="Robot Not Found :( ")
+        raise HTTPException(status_code=404, detail=f"Couldnt't find robot {robot_id}.")
     return db_robot
 
 @app.get('/weight/')
@@ -78,8 +78,8 @@ def read_matches(db: Session = Depends(get_db)):
     return crud.get_matches(db=db)
 
 @app.post('/matches/', response_model=schemas.Match)
-async def create_match(match_in: schemas.MatchIn, db: Session = Depends(get_db)):
-    match = crud.create_match(db=db, match_in=match_in)
+async def create_match(match: schemas.Match, db: Session = Depends(get_db)):
+    match = crud.create_match(db=db, match=match)
     return match
 
 @app.get('/matches/latest', response_model=schemas.Match)

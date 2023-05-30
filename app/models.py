@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Enum
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Enum, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from .database import Base
@@ -9,15 +9,17 @@ class Robot(Base):
     __tablename__ = 'robots'
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, unique=True, index=True)
-    display_name = Column(String)
+    robot_name = Column(String)
     weight = Column(Enum(Weights))
+
+    __table_args__ = (
+        UniqueConstraint('robot_name', 'weight'),
+    )
 
 class Match(Base):
     __tablename__ = 'matches'
     id = Column(Integer, primary_key=True, index=True)
     weight = Column(Enum(Weights))
-    red_bot = Column(Integer, ForeignKey('robots.id'))
-    red_display_name = Column(String)
-    blue_bot = Column(Integer, ForeignKey('robots.id'))
-    blue_display_name = Column(String)
+    red_id = Column(Integer, ForeignKey('robots.id'))
+    blue_id = Column(Integer, ForeignKey('robots.id'))
+    result = Column(String, nullable=True)
