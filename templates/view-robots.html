@@ -11,10 +11,9 @@
 <table>
     <thead>
         <tr>
-            <th>Display Name</th>
+            <th>ID</th>
             <th>Name</th>
             <th>Weight</th>
-            <th>ID</th>
         </tr>
     </thead>
     <tbody id="table-body"></tbody>
@@ -27,36 +26,36 @@
     const weightBtns = document.querySelectorAll('[data-weight]');
     const tbody = document.getElementById('table-body');
 
-    getRobotList().then( robotList => {
-        robotList.forEach( robot => {
-            { id, weight, display_name, name } = robot;
-            console.log(`ID: ${id}, weight: ${weight}, display name: ${display_name}, name: ${name}`);
-        });
-    })
-    
-    
+    function buildTable(weight=null, tableBody=tbody) {
+        tableBody.innerHTML = '';
+        getRobotList(weight).then( robotList => {
+            robotList.forEach( robot => {
+                // For each robot in the list of robots for the specified weight class...
+                
+                // destructure values
+                let { id, weight, robot_name } = robot;
+                
+                // Make a new row
+                let row = document.createElement('tr');
 
-    // function buildTable(weight, tableBody) {
-    //     tableBody.innerHTML = '';
-    //     getRobotList(weight).then(robotList => {
-    //         robotList.forEach((robot) => {
-    //             let row = tableBody.insertRow(-1);
-    //             [robot.display_name, robot.name, robot.weight, robot.id].forEach(item => {
-    //                 row.innerHTML += `<td>${item}</td>`;
-    //             })
-    //         })
-    //     })
-    // };
+                // Fill in values
+                row.innerHTML = `<td>${id}</td><td>${weight}</td><td>${robot_name}</td>`;
 
-    // weightBtns.forEach(btn => {
-    //     btn.addEventListener('click', () => {
-    //         let weight = btn.dataset.weight;
-    //         buildTable(weight, tbody);
-    //     });
-    // })
+                // Add row to table body
+                tableBody.appendChild(row);
+            })
+        })
+    }
 
-    // window.onload = () => {
-    //     buildTable(null, tbody);
-    // }
+    // Add an event listener to each button that loads the relevant table
+    weightBtns.forEach(btn => btn.addEventListener('click', () => {
+        buildTable(btn.dataset.weight);
+    }));
+
+    window.onload = buildTable();
+
+
+
+
 </script>
 {% endblock bodyScripts %}
