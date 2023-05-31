@@ -30,7 +30,11 @@ class Match(MatchIn):
     class Config:
         orm_mode = True
 
-# class MatchDetail(Match):
-#     red_robot: Robot
-#     blue_robot: Robot
+class MatchDetail(BaseModel):
+    id: int
+    result: str | None
+    red_robot: Robot
+    blue_robot: Robot
     
+    class Config:
+        orm_mode = True

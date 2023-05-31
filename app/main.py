@@ -81,6 +81,7 @@ def read_matches(db: Session = Depends(get_db)):
 @app.post('/matches/', response_model=schemas.MatchIn)
 async def create_match(match_in: schemas.MatchIn, db: Session = Depends(get_db)):
     db_match = crud.create_match(db=db, match_in=match_in)
+    print(db_match.id)
     return db_match
 
 @app.get('/matches/latest', response_model=schemas.Match)
@@ -88,12 +89,20 @@ def get_latest_match(db: Session = Depends(get_db)):
     db_match = crud.get_latest_match(db=db)
     return db_match
 
-
-
-@app.get('/matches/{match_id}', response_model=schemas.Match)
+@app.get('/matches/{match_id}/', response_model=schemas.Match)
 def get_match_by_id(match_id: int, db: Session = Depends(get_db)):
     db_match = crud.get_match_by_id(db=db, match_id=match_id)
     return db_match
+
+@app.get('/matches/{match_id}/detail', response_model=schemas.MatchDetail)
+def get_match_details(match_id: int, db: Session = Depends(get_db)):
+    db_match = crud.get_match_by_id(db=db, match_id=match_id)
+    red_robot = crud.get_robot_by_id(db, db_match.red_id)
+    blue_robot = crud.get_robot_by_id(db, db_match.blue_id)
+    # return schemas.MatchDetail(weight=db_match.weight, red_id=db_match.red_id, blue_id=db_match.blue_id,id=db_match.id,result=db_match.result,red_robot=red_robot,blue_robot=blue_robot)
+    return schemas.MatchDetail(id=db_match.id, result=db_match.result, red_robot=red_robot,blue_robot=blue_robot)
+    
+
 
 @app.websocket('/ws/{purpose}')
 async def websocket_endpoint(purpose: str | None, websocket: WebSocket):
