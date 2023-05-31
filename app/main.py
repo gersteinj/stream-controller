@@ -120,7 +120,7 @@ def get_match_details(match_id: int, db: Session = Depends(get_db)):
 
 @app.get('/', response_class=HTMLResponse)
 def homepage(request: Request):
-    return templates.TemplateResponse('index.html', {'request': request})
+    return templates.TemplateResponse('index.html', {'request': request, 'title': 'Home'})
 
 @app.get('/view/controls', response_class=HTMLResponse)
 def control_panel_view(request: Request):

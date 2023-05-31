@@ -1,14 +1,18 @@
 {% extends 'layouts/ui-base.html' %}
 
 {% block content %}
-<h1>View Robots</h1>
-<div>
-    <button data-weight="ALL">All Robots</button>
-    <button data-weight="ANT">Antweight</button>
-    <button data-weight="PLANT">Plastic Ant</button>
-    <button data-weight="BEETLE">Beetleweight</button>
+
+<div class="btn-group">
+
+    <button class="btn btn-link" data-weight="ALL">All Robots</button>
+    <button class="btn btn-link" data-weight="ANT">Antweight</button>
+    <button class="btn btn-link" data-weight="PLANT">Plastic Ant</button>
+    <button class="btn btn-link" data-weight="BEETLE">Beetleweight</button>
 </div>
-<table>
+
+
+
+<table class="table">
     <thead>
         <tr>
             <th>ID</th>

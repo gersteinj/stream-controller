@@ -1,28 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="garden">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% block headScripts %}
-      
-    {% endblock headScripts %}
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/sakura.css/css/sakura-vader.css"
-      type="text/css"
-    />
-    <title>{{ title }}</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% block headScripts %}
+
+  {% endblock headScripts %}
+
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@2.52.0/dist/full.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>{{ title }}</title>
 </head>
+
 <body>
-  {% include 'layouts/partials/header.html'   %}
 
-    {% block content %}
-      
-    {% endblock content %}
+  <nav class="navbar bg-base-200">
+    <div class="navbar-start">
+      <div class="dropdown">
+        <label tabindex="0" class="btn btn-ghost btn-circle">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
+        </label>
+        <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-200 rounded-box w-40">
+          <li><a href="/">Home</a></li>
+          <li><a href="{{ url_for('control_panel_view' ) }}">Control Panel</a></li>
+          <li><a href="{{ url_for('all_robots_view') }}">View All Robots</a></li>
+          <li><a href="{{ url_for('create_robot_view' ) }}">Create a Robot</a></li>
+          <li><a href="{{ url_for( 'display_view' ) }}">Display Test</a></li>
 
-    {% block bodyScripts %}
-      
-    {% endblock bodyScripts %}
+        </ul>
+      </div>
+    </div>
+    <div class="navbar-center">
+      <a href="/" class="btn btn-ghost normal-case text-xl">Stream Control</a>
+    </div>
+
+    <div class="navbar-end">
+      <p>Status, maybe?</p>
+    </div>
+  </nav>
+  
+  <div class="container-fluid p-4 mx-auto">
+
+    <h1 class="text-3xl">{{ title }}</h1>
+    {% block content %}{% endblock content %}
+  </div>
+
+  {% block bodyScripts %}{% endblock bodyScripts %}
 </body>
+
 </html>
