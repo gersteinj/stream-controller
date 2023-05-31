@@ -2,14 +2,6 @@ from sqlalchemy.orm import Session
 from . import models, schemas
 from .myEnums import Weights
 
-###############################################
-#                                             #
-#              Utility Functions              #
-#                                             #
-###############################################
-
-# def convert_name(display_name: str):
-#     return display_name.replace(' ','-').lower()
 
 ###############################################
 #                                             #
@@ -43,8 +35,8 @@ def get_robots_by_weight(db: Session, weight: Weights):
 #                                             #
 ###############################################
 
-def create_robot(db: Session, robot: schemas.Robot):
-    db_robot = models.Robot(robot_name=robot.robot_name, weight=robot.weight)
+def create_robot(db: Session, robot_in: schemas.RobotIn):
+    db_robot = models.Robot(**robot_in.dict())
     db.add(db_robot)
     db.commit()
     db.refresh(db_robot)
@@ -56,8 +48,8 @@ def create_robot(db: Session, robot: schemas.Robot):
 #                                             #
 ###############################################
 
-def create_match(db: Session, match: schemas.Match):
-    db_match = models.Match(weight=match.weight, red_id=match.red_id, blue_id=match.blue_id)
+def create_match(db: Session, match_in: schemas.MatchIn):
+    db_match = models.Match(**match_in.dict())
     db.add(db_match)
     db.commit()
     db.refresh(db_match)
@@ -67,7 +59,6 @@ def get_matches(db: Session):
     return db.query(models.Match).all()
 
 def get_latest_match(db: Session):
-    # return db.query(models.Match).all()[-1]
     return db.query(models.Match).order_by(models.Match.id.desc()).first()
 
 def get_match_by_id(db: Session, match_id: int):
