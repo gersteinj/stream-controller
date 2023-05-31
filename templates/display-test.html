@@ -25,10 +25,18 @@
 {% block bodyScripts %}
     <script type="module">
         import { getLatestMatch } from '/static/scripts/utilities.js';
-
         const updateBtn = document.getElementById('update-all');
         
-        getLatestMatch().then( match => console.log(match));
+        function updateMatch() {
+            getLatestMatch().then( match => {
+                let { red_id, blue_id, weight } = match;
+                document.getElementById('weight').innerText = weight;
+                document.getElementById('red-bot').innerText = red_id;
+                document.getElementById('blue-bot').innerText = blue_id;
+            });
+        }
+
+        updateBtn.addEventListener('click', updateMatch);
         
     </script>
 {% endblock bodyScripts %}

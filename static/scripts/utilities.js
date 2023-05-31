@@ -9,20 +9,12 @@ export async function getRobotList(weight = null) {
     }
 }
 
-// Everything above here has been checked //
-
-export async function getLatestMatch() {
-    let response = await fetch('http://localhost:8000/matches/latest');
-    return await response.json();
-}
-
 export async function postNewRobot(robot_name, weight) {
     let message = JSON.stringify({
         robot_name: robot_name,
         weight: weight
     });
     // console.log(`Creating a robot from ${message}`);
-
     fetch('http://localhost:8000/robots/', {
         method: 'POST',
         headers: {
@@ -34,11 +26,11 @@ export async function postNewRobot(robot_name, weight) {
         .then(json => console.log(json));
 }
 
-export async function postNewMatch(red_bot, blue_bot, weight) {
+export async function postNewMatch(red_id, blue_id, weight) {
     let message = JSON.stringify({
         weight: weight,
-        red_bot: red_bot,
-        blue_bot: blue_bot
+        red_id: red_id,
+        blue_id: blue_id
     });
     fetch('http://localhost:8000/matches/', {
         method: 'POST',
@@ -47,4 +39,12 @@ export async function postNewMatch(red_bot, blue_bot, weight) {
         },
         body: message
     }).then(response => response.json()).then(json => console.log(json));
+}
+
+// Everything above here has been checked //
+
+export async function getLatestMatch() {
+    let response = await fetch('http://localhost:8000/matches/latest');
+    console.log('getting latest match');
+    return await response.json();
 }

@@ -57,7 +57,8 @@
         getRobotList(weight)
             .then(robotList => {
                 robotList.forEach(robot => {
-                    let opt = `<option value="${robot.name}">${robot.display_name}</option>`
+                    let { robot_name, id } = robot;
+                    let opt = `<option value="${id}">${robot_name}</option>`
                     optionSets[weight] += opt;
                 })
             })
