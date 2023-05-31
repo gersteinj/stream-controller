@@ -27,16 +27,13 @@
         import { getLatestMatch } from '/static/scripts/utilities.js';
         const updateBtn = document.getElementById('update-all');
         
-        function updateMatch() {
-            getLatestMatch().then( match => {
-                let { red_id, blue_id, weight } = match;
-                document.getElementById('weight').innerText = weight;
-                document.getElementById('red-bot').innerText = red_id;
-                document.getElementById('blue-bot').innerText = blue_id;
-            });
+        const ws = new WebSocket('ws://localhost:8000/ws/display');
+        ws.onopen = function(event) {
+            console.log('connected');
+        };
+        ws.onmessage = function(event) {
+            console.log(event);
         }
-
-        updateBtn.addEventListener('click', updateMatch);
         
     </script>
 {% endblock bodyScripts %}

@@ -43,10 +43,7 @@ export async function postNewMatch(red_id, blue_id, weight) {
     .then(json => console.log(json));
 }
 
-// Everything above here has been checked //
-
 export async function getLatestMatch() {
     let response = await fetch('http://localhost:8000/matches/latest');
-    console.log('getting latest match');
-    return await response.json();
+    return await response.text()   
 }

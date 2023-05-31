@@ -61,6 +61,7 @@ def create_robot(robot: schemas.RobotIn, db: Session = Depends(get_db)):
     # if db_robot:
     #     raise HTTPException(status_code=400, detail="Name already used!")
     db_robot = crud.create_robot(db=db, robot_in=robot)
+    
     return db_robot
 
 @app.get('/robots/id/{robot_id}', response_model=schemas.Robot)
@@ -82,12 +83,18 @@ def read_matches(db: Session = Depends(get_db)):
 async def create_match(match_in: schemas.MatchIn, db: Session = Depends(get_db)):
     db_match = crud.create_match(db=db, match_in=match_in)
     print(db_match.id)
+    await manager.broadcast('HELLO')
     return db_match
 
-@app.get('/matches/latest', response_model=schemas.Match)
+# @app.get('/matches/latest', response_model=schemas.Match)
+# def get_latest_match(db: Session = Depends(get_db)):
+#     db_match = crud.get_latest_match(db=db)
+#     return db_match
+
+@app.get('/matches/latest', response_model=int)
 def get_latest_match(db: Session = Depends(get_db)):
     db_match = crud.get_latest_match(db=db)
-    return db_match
+    return db_match.id
 
 @app.get('/matches/{match_id}/', response_model=schemas.Match)
 def get_match_by_id(match_id: int, db: Session = Depends(get_db)):
