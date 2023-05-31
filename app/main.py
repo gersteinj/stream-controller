@@ -47,12 +47,12 @@ manager = ConnectionManager()
 
 @app.get('/robots/', response_model=list[schemas.Robot])
 def read_robots(skip: int=0, limit: int=500, db: Session = Depends(get_db)):
-    robots = crud.get_robots(db, skip=skip, limit=limit)
+    robots = crud.get_robots(db=db, skip=skip, limit=limit)
     return robots
 
 @app.get('/robots/{weight}', response_model=list[schemas.Robot])
 def read_robots_by_weight(weight: Weights, db: Session = Depends(get_db)):
-    robots = crud.get_robots_by_weight(db, weight=weight)
+    robots = crud.get_robots_by_weight(db=db, weight=weight)
     return robots
 
 @app.post('/robots/', response_model=schemas.RobotIn)
@@ -60,12 +60,12 @@ def create_robot(robot: schemas.RobotIn, db: Session = Depends(get_db)):
     # db_robot = crud.get_robot_by_display_name(db, display_name=robot.display_name)
     # if db_robot:
     #     raise HTTPException(status_code=400, detail="Name already used!")
-    db_robot = crud.create_robot(db, robot_in=robot)
+    db_robot = crud.create_robot(db=db, robot_in=robot)
     return db_robot
 
 @app.get('/robots/id/{robot_id}', response_model=schemas.Robot)
 def read_robot_by_id(robot_id: int, db: Session = Depends(get_db)):
-    db_robot = crud.get_robot_by_id(db, robot_id=robot_id)
+    db_robot = crud.get_robot_by_id(db=db, robot_id=robot_id)
     if db_robot is None:
         raise HTTPException(status_code=404, detail=f"Couldnt't find robot {robot_id}.")
     return db_robot
@@ -80,14 +80,20 @@ def read_matches(db: Session = Depends(get_db)):
 
 @app.post('/matches/', response_model=schemas.MatchIn)
 async def create_match(match_in: schemas.MatchIn, db: Session = Depends(get_db)):
-    db_match = crud.create_match(db, match_in=match_in)
+    db_match = crud.create_match(db=db, match_in=match_in)
     return db_match
 
 @app.get('/matches/latest', response_model=schemas.Match)
 def get_latest_match(db: Session = Depends(get_db)):
-    db_match = crud.get_latest_match(db)
+    db_match = crud.get_latest_match(db=db)
     return db_match
-    
+
+
+
+@app.get('/matches/{match_id}', response_model=schemas.Match)
+def get_match_by_id(match_id: int, db: Session = Depends(get_db)):
+    db_match = crud.get_match_by_id(db=db, match_id=match_id)
+    return db_match
 
 @app.websocket('/ws/{purpose}')
 async def websocket_endpoint(purpose: str | None, websocket: WebSocket):

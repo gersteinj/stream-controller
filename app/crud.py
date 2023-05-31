@@ -63,3 +63,8 @@ def get_latest_match(db: Session):
 
 def get_match_by_id(db: Session, match_id: int):
     return db.query(models.Match).filter(models.Match.id == match_id).first()
+
+# def get_match_robots(db: Session, match: schemas.Match):
+#     red_robot = get_robot_by_id(db, match.red_id)
+#     blue_robot = get_robot_by_id(db, match.blue_id)
+#     return

@@ -33,7 +33,6 @@
     
     btn.addEventListener('click', () => {
         let weight = dropdown.value;
-        // splitNames(nameInput.value).forEach( displayName => postNewRobot(displayName, weight));
         let names = splitNames(nameInput.value);
         if (names.length > 1) {
             if ( !confirmNames(names) ) {
@@ -41,7 +40,10 @@
                 return 'canceled';
             }
         }
-        names.forEach( displayName => postNewRobot(displayName, weight));
+        
+        names.forEach( robotName => {
+            postNewRobot(robotName, weight);
+        });
     });
 </script>
 

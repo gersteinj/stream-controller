@@ -16,16 +16,19 @@ export async function getLatestMatch() {
     return await response.json();
 }
 
-export async function postNewRobot(display_name, weight) {
+export async function postNewRobot(robot_name, weight) {
+    let message = JSON.stringify({
+        robot_name: robot_name,
+        weight: weight
+    });
+    // console.log(`Creating a robot from ${message}`);
+
     fetch('http://localhost:8000/robots/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
         },
-        body: JSON.stringify({
-            display_name: display_name,
-            weight: weight
-        })
+        body: message
     })
         .then(response => response.json())
         .then(json => console.log(json));
@@ -39,9 +42,9 @@ export async function postNewMatch(red_bot, blue_bot, weight) {
     });
     fetch('http://localhost:8000/matches/', {
         method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: message
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: message
     }).then(response => response.json()).then(json => console.log(json));
 }

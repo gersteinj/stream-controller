@@ -29,3 +29,8 @@ class Match(MatchIn):
 
     class Config:
         orm_mode = True
+
+# class MatchDetail(Match):
+#     red_robot: Robot
+#     blue_robot: Robot
+    
