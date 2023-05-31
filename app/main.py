@@ -37,19 +37,25 @@ class ConnectionManager:
     def disconnect(self, websocket: WebSocket):
         self.active_connections.remove(websocket)
     
-    async def send_personal_message(self, message: str, websocket: WebSocket):
-        await websocket.send_json(message)
-    
-    async def broadcast(self, message: str):
-        for connection in self.active_connections:
-            await connection.send_text(message)
-    
-    async def event_broadcast(self, event_type, event_data):
+    async def event_broadcast(self, event_type: str, event_data):
         msg_json = {'event_type': event_type, 'data': event_data }
         for connection in self.active_connections:
             await connection.send_json(msg_json)
 
 manager = ConnectionManager()
+
+@app.websocket('/ws/{purpose}')
+async def websocket_endpoint(purpose: str | None, websocket: WebSocket):
+    await manager.connect(websocket)
+    try:
+        while True:
+            data = await websocket.receive_json()
+            await manager.event_broadcast(data);
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
+        await manager.event_broadcast('disconnect', None)
+
+########################################################################################
 
 @app.get('/robots/', response_model=list[schemas.Robot])
 def read_robots(skip: int=0, limit: int=500, db: Session = Depends(get_db)):
@@ -93,11 +99,6 @@ async def create_match(match_in: schemas.MatchIn, db: Session = Depends(get_db))
     await manager.event_broadcast('new_match', db_match.id)
     return db_match
 
-# @app.get('/matches/latest', response_model=schemas.Match)
-# def get_latest_match(db: Session = Depends(get_db)):
-#     db_match = crud.get_latest_match(db=db)
-#     return db_match
-
 @app.get('/matches/latest', response_model=int)
 def get_latest_match(db: Session = Depends(get_db)):
     db_match = crud.get_latest_match(db=db)
@@ -116,18 +117,6 @@ def get_match_details(match_id: int, db: Session = Depends(get_db)):
     return schemas.MatchDetail(id=db_match.id, weight=db_match.weight, result=db_match.result, red_robot=red_robot,blue_robot=blue_robot)
     
 
-
-@app.websocket('/ws/{purpose}')
-async def websocket_endpoint(purpose: str | None, websocket: WebSocket):
-    await manager.connect(websocket)
-    try:
-        while True:
-            data = await websocket.receive_text()
-            await manager.send_personal_message(f'You wrote: {data}', websocket)
-            await manager.broadcast(data)
-    except WebSocketDisconnect:
-        manager.disconnect(websocket)
-        await manager.broadcast('Somebody disconnected')
 
 @app.get('/', response_class=HTMLResponse)
 def homepage(request: Request):
