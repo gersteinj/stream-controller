@@ -38,7 +38,9 @@ export async function postNewMatch(red_id, blue_id, weight) {
             'Content-Type': 'application/json;charset=utf-8'
         },
         body: message
-    }).then(response => response.json()).then(json => console.log(json));
+    })
+    .then(response => response.json())
+    .then(json => console.log(json));
 }
 
 // Everything above here has been checked //
