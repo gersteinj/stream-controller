@@ -5,21 +5,42 @@
 {% endblock headScripts %}
 
 {% block content %}
-<h1>Control Panel</h1>
+
+<div class="form-control">
+    <h2 class="text-xl">Match Creation</h2>
+    <div class="input-group input-group-vertical">
+        <div class="btn-group flex">
+            <button class="btn btn-ghost flex-1" data-weight="ANT">Antweight</button>
+            <button class="btn btn-ghost flex-1" data-weight="PLANT">Plastic Ant</button>
+            <button class="btn btn-ghost flex-1" data-weight="BEETLE">Beetleweight</button>
+        </div>
+        <div class="input-group">
+            
+            <label class="input-group input-group-vertical">
+                <span>Red Robot</span>
+                <select class="select select-bordered" data-select="red" name="red-robot-select"
+                id="red-robot-select"></select>
+            </label>
+            
+            <label class="input-group input-group-vertical">
+                <span>Blue Robot</span>
+                <select class="select select-bordered" data-select="blue" name="blue-robot-select"
+                id="blue-robot-select"></select>
+            </label>
+            
+        </div>
+        <button class="btn btn-block" id="create-match">Set Match</button>
+    </div>
+
+</div>
 
 <fieldset>
     <legend>Match Setup</legend>
     <!-- <h2>Match Setup</h2> -->
     <div>
-        <button data-weight="ANT">Antweight</button>
-        <button data-weight="PLANT">Plastic Ant</button>
-        <button data-weight="BEETLE">Beetleweight</button>
     </div>
     <div>
 
-        <select data-select="red" name="red-robot-select" id="red-robot-select"></select>
-        <select data-select="blue" name="blue-robot-select" id="blue-robot-select"></select>
-        <button id="create-match">Set Match</button>
     </div>
 </fieldset>
 
@@ -87,31 +108,31 @@
     const resultTypeRadios = document.getElementsByName('result-type');
     const resultTypeUpdate = document.getElementById('update-result-type');
     const resultTypeClear = document.getElementById('clear-result-type');
-    
+
     resultTypeUpdate.addEventListener('click', () => {
         let selected = null;
         resultTypeRadios.forEach(radio => {
-                if (radio.checked) {
-                    selected = radio.value;
-                }
-            })
+            if (radio.checked) {
+                selected = radio.value;
+            }
+        })
         console.log(selected);
     });
     resultTypeClear.addEventListener('click', () => {
         resultTypeRadios.forEach(radio => radio.checked = false);
     });
-    
+
     const winnerRadios = document.getElementsByName('winner-radio');
     const winnerUpdate = document.getElementById('update-winner');
     const winnerClear = document.getElementById('clear-winner');
-    
+
     winnerUpdate.addEventListener('click', () => {
         let selected = null;
         winnerRadios.forEach(radio => {
-                if (radio.checked) {
-                    selected = radio.value;
-                }
-            })
+            if (radio.checked) {
+                selected = radio.value;
+            }
+        })
         console.log(selected);
     });
     winnerClear.addEventListener('click', () => {
