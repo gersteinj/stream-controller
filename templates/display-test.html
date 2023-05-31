@@ -5,38 +5,48 @@
 {% endblock headScripts %}
 
 {% block content %}
-    <h1>Display Test</h1>
-    <p>Displays everything. Primarily intended for troubleshooting purposes</p>
-    <button id="update-all">Force Refresh</button>
-    <h2>Current Match</h2>
-    <p><span id="weight">Weight Class</span>  <span id="red-bot">Red</span>   <span id="blue-bot">Blue</span></p>
+<h1>Display Test</h1>
+<p>Displays everything. Primarily intended for troubleshooting purposes</p>
+<button id="update-all">Force Refresh</button>
+<h2>Current Match</h2>
+<p><span id="weight">Weight Class</span> <span id="red-bot">Red</span> <span id="blue-bot">Blue</span></p>
 
-    <style>
-        #red-bot {
-            text-shadow: 0 0 3px red, 0 0 5px red;
-        }
-        #blue-bot {
-            text-shadow: 0 0 3px #59f, 0 0 5px #59f;
-        }
-    </style>
+<style>
+    #red-bot {
+        text-shadow: 0 0 3px red, 0 0 5px red;
+    }
+
+    #blue-bot {
+        text-shadow: 0 0 3px #59f, 0 0 5px #59f;
+    }
+</style>
 
 {% endblock %}
 
 {% block bodyScripts %}
-    <script type="module">
-        import { getLatestMatch } from '/static/scripts/utilities.js';
-        const updateBtn = document.getElementById('update-all');
-        
-        const ws = new WebSocket('ws://localhost:8000/ws/display');
-        ws.onopen = function(event) {
-            console.log('connected');
-        };
-        ws.onmessage = function(event) {
-            let msg = JSON.parse(event.data);
-            if (msg.event_type == 'new_match') {
-                console.log(msg.data);
-            }
+<script type="module">
+    import { getLatestMatch, getMatchDetails } from '/static/scripts/utilities.js';
+    const updateBtn = document.getElementById('update-all');
+
+    const ws = new WebSocket('ws://localhost:8000/ws/display');
+    ws.onopen = function (event) {
+        console.log('connected');
+    };
+    ws.onmessage = function (event) {
+        let msg = JSON.parse(event.data);
+        if (msg.event_type == 'new_match') {
+            
+            getMatchDetails(msg.data).then(matchDetails => {
+                let { id, weight, red_robot, blue_robot } = matchDetails;
+                document.getElementById('weight').innerText = weight;
+                document.getElementById('red-bot').innerText = red_robot.robot_name;
+                document.getElementById('blue-bot').innerText = blue_robot.robot_name;
+
+            });
+
+
         }
-        
-    </script>
+    }
+
+</script>
 {% endblock bodyScripts %}

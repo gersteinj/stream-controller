@@ -45,5 +45,10 @@ export async function postNewMatch(red_id, blue_id, weight) {
 
 export async function getLatestMatch() {
     let response = await fetch('http://localhost:8000/matches/latest');
-    return await response.text()   
+    return await response.text();  
+}
+
+export async function getMatchDetails(match_id) {
+    let response = await fetch(`http://localhost:8000/matches/${match_id}/detail`);
+    return await response.json();
 }

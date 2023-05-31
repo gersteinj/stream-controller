@@ -32,6 +32,7 @@ class Match(MatchIn):
 
 class MatchDetail(BaseModel):
     id: int
+    weight: Weights
     result: str | None
     red_robot: Robot
     blue_robot: Robot

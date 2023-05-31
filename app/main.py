@@ -113,7 +113,7 @@ def get_match_details(match_id: int, db: Session = Depends(get_db)):
     db_match = crud.get_match_by_id(db=db, match_id=match_id)
     red_robot = crud.get_robot_by_id(db, db_match.red_id)
     blue_robot = crud.get_robot_by_id(db, db_match.blue_id)
-    return schemas.MatchDetail(id=db_match.id, result=db_match.result, red_robot=red_robot,blue_robot=blue_robot)
+    return schemas.MatchDetail(id=db_match.id, weight=db_match.weight, result=db_match.result, red_robot=red_robot,blue_robot=blue_robot)
     
 
 
