@@ -26,6 +26,8 @@
 {% block bodyScripts %}
 <script type="module">
     import { getLatestMatch, getMatchDetails } from '/static/scripts/utilities.js';
+    
+
     const updateBtn = document.getElementById('update-all');
 
     const ws = new WebSocket('ws://localhost:8000/ws/display');
@@ -42,10 +44,7 @@
                 document.getElementById('weight').innerText = weight;
                 document.getElementById('red-bot').innerText = red_robot.robot_name;
                 document.getElementById('blue-bot').innerText = blue_robot.robot_name;
-
             });
-
-
         }
     }
 

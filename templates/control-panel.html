@@ -36,15 +36,24 @@
 {% block bodyScripts %}
 <script type="module">
     import { getRobotList, getLatestMatch, postNewMatch } from '/static/scripts/utilities.js';
+    import mqtt_client from '/static/lib/u8-mqtt/esm/web/v5.js';
+    let my_mqtt = mqtt_client()
+        .with_websock('wss://test.mosquitto.org:8081')
+        .with_autoreconnect()
+
+    await my_mqtt.connect();
+
+    my_mqtt.subscribe_topic(
+        'test/meteo/#', (pkt, params, ctx) => {
+            console.log(params);
+        }
+    )
+
+    
+
     const robotDropdowns = document.querySelectorAll('[data-select]');
     const weightBtns = document.querySelectorAll('[data-weight]');
     const createMatchBtn = document.getElementById('create-match');
-    
-    const ws = new WebSocket('ws://localhost:8000/ws/controls');
-    
-    ws.onopen = (event) => {
-        ws.send('control panel connected');
-    }
 
     let activeWeight = null;
 
@@ -62,7 +71,7 @@
                     optionSets[weight] += opt;
                 })
             })
-            .finally(() => console.log(optionSets));
+            // .finally(() => console.log(optionSets));
 
         // create event listeners on the weight buttons to populate the dropdowns with the auto-generated options
         btn.addEventListener('click', () => {
