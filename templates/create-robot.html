@@ -2,16 +2,22 @@
 
 {% block content %}
 
-<h1>Create a Robot</h1>
-<p>For multi-robot input, separate with commas</p>
-<label for="name-input">Robot's Display Name</label>
-<input type="text" id="name">
-<button id="create">Create</button>
-<select name="weight" id="weight">
-    <option value="ANT">Antweight</option>
-    <option value="PLANT">Plastic Ant</option>
-    <option value="BEETLE">Beetleweight</option>
-</select>
+
+<div class="form-control w-full max-w-lg">
+    <label for="name-input" class="label"><span class="label-text">For multiple robots, enter a comma-separated list</span></label>
+    <div class="input-group" id="robot-input-group">
+        <select class="select select-bordered" name="weight" id="weight">
+            <option value="ANT">Antweight</option>
+            <option value="PLANT">Plastic Ant</option>
+            <option value="BEETLE">Beetleweight</option>
+        </select>
+        <input class="input input-bordered w-full" type="text" id="name-input" placeholder="Name or comma-separated list">
+        <button class="btn btn-primary" id="create">Create</button>
+    </div>
+
+
+</div>
+
 
 {% endblock %}
 
