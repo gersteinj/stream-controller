@@ -6,46 +6,48 @@
 
 {% block content %}
 
-<div class="form-control">
-    <h2 class="text-xl">Match Creation</h2>
-    <div class="input-group input-group-vertical">
-        <div class="btn-group flex">
-            <button class="btn btn-ghost flex-1" data-weight="ANT">Antweight</button>
-            <button class="btn btn-ghost flex-1" data-weight="PLANT">Plastic Ant</button>
-            <button class="btn btn-ghost flex-1" data-weight="BEETLE">Beetleweight</button>
-        </div>
-        <div class="input-group">
-            
-            <label class="input-group input-group-vertical">
-                <span>Red Robot</span>
-                <select class="select select-bordered" data-select="red" name="red-robot-select"
-                id="red-robot-select"></select>
-            </label>
-            
-            <label class="input-group input-group-vertical">
-                <span>Blue Robot</span>
-                <select class="select select-bordered" data-select="blue" name="blue-robot-select"
-                id="blue-robot-select"></select>
-            </label>
-            
-        </div>
-        <button class="btn btn-block" id="create-match">Set Match</button>
-    </div>
+<div class="card bg-base-300 text-base-content shadow-xl w-fit">
+    <div class="card-body">
+        <h2 class="card-title">Match Creation</h2>
+        <p>Put directions here</p>
 
+        <div class="flex flex-col gap-2">
+
+            <div class="flex flex-col md:flex-row gap-2">
+
+                <div class="flex flex-col gap-2">
+                    <button class="btn btn-primary" data-weight="ANT">Antweight</button>
+                    <button class="btn btn-primary" data-weight="PLANT">Plastic Ant</button>
+                    <button class="btn btn-primary" data-weight="BEETLE">Beetleweight</button>
+                </div>
+
+                <div class="flex flex-col gap-2 justify-between">
+
+                    <label class="input-group input-group-vertical w-44">
+                        <span class="bg-red-900 text-white label-text">Red</span>
+                        <select class="select select-bordered text-red-900 bg-red-50 text-lg" data-select="red"
+                            name="red-robot-select" id="red-robot-select"></select>
+                    </label>
+                    <label class="input-group input-group-vertical w-44">
+                        <span class="bg-blue-900 text-white label-text">Blue</span>
+                        <select class="select select-bordered text-blue-900 bg-blue-50 text-lg" data-select="blue"
+                            name="blue-robot-select" id="blue-robot-select"></select>
+                    </label>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="create-match">Set Match</button>
+
+        </div>
+    </div>
 </div>
 
-<fieldset>
-    <legend>Match Setup</legend>
-    <!-- <h2>Match Setup</h2> -->
-    <div>
+<div class="card bg-base-300 text-base-content shadow-xl w-fit">
+    <div class="card-body">
+        <h2 class="card-title">Match Results</h2>
+        <p>Put directions here</p>
     </div>
-    <div>
-
-    </div>
-</fieldset>
-
-
-
+</div>
 
 <fieldset>
     <legend>Match Results</legend>
