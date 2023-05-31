@@ -3,6 +3,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
+import json
 
 from . import crud, models, schemas
 from .database import SessionLocal, engine
@@ -37,11 +38,16 @@ class ConnectionManager:
         self.active_connections.remove(websocket)
     
     async def send_personal_message(self, message: str, websocket: WebSocket):
-        await websocket.send_text(message)
+        await websocket.send_json(message)
     
     async def broadcast(self, message: str):
         for connection in self.active_connections:
             await connection.send_text(message)
+    
+    async def event_broadcast(self, event_type, event_data):
+        msg_json = {'event_type': event_type, 'data': event_data }
+        for connection in self.active_connections:
+            await connection.send_json(msg_json)
 
 manager = ConnectionManager()
 
@@ -83,7 +89,8 @@ def read_matches(db: Session = Depends(get_db)):
 async def create_match(match_in: schemas.MatchIn, db: Session = Depends(get_db)):
     db_match = crud.create_match(db=db, match_in=match_in)
     print(db_match.id)
-    await manager.broadcast('HELLO')
+    
+    await manager.event_broadcast('new_match', db_match.id)
     return db_match
 
 # @app.get('/matches/latest', response_model=schemas.Match)
@@ -106,7 +113,6 @@ def get_match_details(match_id: int, db: Session = Depends(get_db)):
     db_match = crud.get_match_by_id(db=db, match_id=match_id)
     red_robot = crud.get_robot_by_id(db, db_match.red_id)
     blue_robot = crud.get_robot_by_id(db, db_match.blue_id)
-    # return schemas.MatchDetail(weight=db_match.weight, red_id=db_match.red_id, blue_id=db_match.blue_id,id=db_match.id,result=db_match.result,red_robot=red_robot,blue_robot=blue_robot)
     return schemas.MatchDetail(id=db_match.id, result=db_match.result, red_robot=red_robot,blue_robot=blue_robot)
     
 

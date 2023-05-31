@@ -32,7 +32,10 @@
             console.log('connected');
         };
         ws.onmessage = function(event) {
-            console.log(event);
+            let msg = JSON.parse(event.data);
+            if (msg.event_type == 'new_match') {
+                console.log(msg.data);
+            }
         }
         
     </script>
