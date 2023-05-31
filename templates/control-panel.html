@@ -26,7 +26,7 @@
     <h2>Time Controls</h2>
     <button id="reset-time">Reset Timer</button>
     <label for="time-input">Seconds to Add</label>
-    <input type="text" id="time-input">
+    <input type="number" id="time-input">
     <button id="increment-time">Add Time</button>
 </div>
 
@@ -43,17 +43,20 @@
 
     await my_mqtt.connect();
 
-    my_mqtt.subscribe_topic(
-        'test/meteo/#', (pkt, params, ctx) => {
-            console.log(params);
-        }
-    )
-
-    
-
     const robotDropdowns = document.querySelectorAll('[data-select]');
     const weightBtns = document.querySelectorAll('[data-weight]');
     const createMatchBtn = document.getElementById('create-match');
+
+    const resetTimeBtn = document.getElementById('reset-time');
+    const incrementTimeBtn = document.getElementById('increment-time');
+    const timeInput = document.getElementById('time-input');
+
+    resetTimeBtn.addEventListener('click', () => {
+        my_mqtt.send('timecontrol', 'r');
+    });
+    incrementTimeBtn.addEventListener('click', () => {
+        my_mqtt.send('timecontrol', `a${timeInput.value}`);
+    })
 
     let activeWeight = null;
 
