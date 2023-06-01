@@ -7,62 +7,79 @@
 {% block content %}
 
 <div class="grid grid-cols-5 gap-4 grid-flow-row-dense">
-    <div class="bg-primary text-primary-content p-4">Placeholder 1</div>
 
     <div class="col-span-full sm:col-span-3 lg:col-span-2 card bg-base-300 text-base-content shadow-xl">
         <div class="card-body">
             <h2 class="card-title">Match Creation</h2>
             <p>Directions go here</p>
 
-            <div class="card-actions">
-                <button class="btn btn-primary grow" data-weight="ANT">Ant</button>
-                <button class="btn btn-primary grow" data-weight="PLANT">Plant</button>
-                <button class="btn btn-primary grow" data-weight="BEETLE">Beetle</button>
+            <div class="card-actions flex-col items-stretch">
+                <div class="btn-group w-full">
 
-                <label class="input-group input-group-vertical">
-                    <span class="bg-red-900 text-white label-text">Red</span>
-                    <select class="select select-bordered text-red-900 bg-red-50 text-lg" data-select="red"
-                        name="red-robot-select" id="red-robot-select"></select>
-                </label>
-                <label class="input-group input-group-vertical">
-                    <span class="bg-blue-900 text-white label-text">Blue</span>
-                    <select class="select select-bordered text-blue-900 bg-blue-50 text-lg" data-select="blue"
-                        name="blue-robot-select" id="blue-robot-select"></select>
-                </label>
+                    <button class="btn btn-primary grow" data-weight="ANT">Ant</button>
+                    <button class="btn btn-primary grow" data-weight="PLANT">Plant</button>
+                    <button class="btn btn-primary grow" data-weight="BEETLE">Beetle</button>
+                </div>
+
+                <div class="flex flex-col lg:flex-row gap-2">
+
+                    <label class="input-group input-group-vertical">
+                        <span class="bg-red-900 text-white label-text">Red</span>
+                        <select class="select select-bordered text-red-900 bg-red-50 text-lg" data-select="red"
+                            name="red-robot-select" id="red-robot-select"></select>
+                    </label>
+                    <label class="input-group input-group-vertical">
+                        <span class="bg-blue-900 text-white label-text">Blue</span>
+                        <select class="select select-bordered text-blue-900 bg-blue-50 text-lg" data-select="blue"
+                            name="blue-robot-select" id="blue-robot-select"></select>
+                    </label>
+                </div>
 
                 <button class="btn btn-primary grow" id="create-match">Set Match</button>
             </div>
         </div>
     </div>
 
-    <div class="col-span-2 row-span-1 card bg-base-300 text-base-content shadow-xl">
+    <div class="col-span-3 lg:col-span-2 xl:col-span-1 card bg-base-300 text-base-content shadow-xl">
         <div class="card-body">
             <h2 class="card-title">Match Results</h2>
             <p>Directions go here</p>
 
+            <div class="card-actions flex-col items-stretch">
 
-
-            <div class="form-control">
-                <label class="label">
-                    <span class="label-text">Judge</span>
-                    <input type="radio" name="result-type" id="result-jd" value="JUDGE" checked>
-                </label>
-                <label class="label">
-                    <span class="label-text">Knockout</span>
-                    <input type="radio" name="result-type" id="result-ko" value="KO">
-                </label>
-                <label class="label">
-                    <span class="label-text">Tapout</span>
-                    <input type="radio" name="result-type" id="result-to" value="TO">
-                </label>
+                <select class="select select-bordered text-lg" id="results-select">
+                    <option value="KO">Knockout</option>
+                    <option value="TO">Tapout</option>
+                    <option value="JUDGE">Judge</option>
+                </select>
+                <div class="btn-group">
+                    <button class="btn bg-red-900 text-white w-1/2">Red</button>
+                    <button class="btn bg-blue-900 text-white w-1/2">Blue</button>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary w-1/2">Update</button>
+                    <button class="btn btn-primary w-1/2">Reset</button>
+                </div>
             </div>
-
-
-
         </div>
     </div>
 
+    <div class="col-span-2 lg:col-span-1 card bg-base-300 text-base-content shadow-xl">
+        <div class="card-body">
+            <h2 class="card-title">Time Control</h2>
+            <p>Directions go here</p>
+            <div class="card-actions flex-col items-stretch">
 
+                <button class="btn btn-primary" id="reset-time">Reset</button>
+                <div class="input-group input-group-vertical">
+                    <input class="input input-bordered" type="number" id="time-input">
+                    <button class="btn btn-primary" id="increment-time">Add Time</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-primary text-primary-content p-4">Placeholder 1</div>
     <div class="bg-primary text-primary-content p-4">Placeholder 2</div>
     <div class="bg-primary text-primary-content p-4">Placeholder 3</div>
     <div class="bg-primary text-primary-content p-4">Placeholder 4</div>
@@ -77,43 +94,6 @@
     <div class="bg-primary text-primary-content p-4">Placeholder 13</div>
     <div class="bg-primary text-primary-content p-4">Placeholder 14</div>
 </div>
-
-
-
-<fieldset>
-    <legend>Match Results</legend>
-    <div>
-        <label for="jd">Judge's Decision</label>
-        <input type="radio" name="result-type" id="jd" value="JUDGE">
-        <label for="ko">Knockout</label>
-        <input type="radio" name="result-type" id="ko" value="KNOCKOUT">
-        <label for="to">Tapout</label>
-        <input type="radio" name="result-type" id="to" value="TAPOUT">
-    </div>
-    <button id="update-result-type">Update</button>
-    <button id="clear-result-type">Clear</button>
-
-    <hr>
-
-    <div>
-        <label for="blue">Blue Wins</label>
-        <input type="radio" name="winner-radio" id="blue" value="blue">
-        <label for="red">Red Wins</label>
-        <input type="radio" name="winner-radio" id="red" value="red">
-    </div>
-    <button id="update-winner">Update</button>
-    <button id="clear-winner">Clear</button>
-</fieldset>
-
-<fieldset>
-    <legend>Time Control</legend>
-    <button id="reset-time">Reset Timer</button>
-    <label for="time-input">Seconds to Add</label>
-    <input type="number" id="time-input">
-    <button id="increment-time">Add Time</button>
-</fieldset>
-
-
 
 {% endblock %}
 
