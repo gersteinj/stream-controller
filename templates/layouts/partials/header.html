@@ -1,8 +1,11 @@
-<header>
-    <a href="/"><button>Home</button></a>
-    <a href="{{ url_for('control_panel_view') }}"><button>Control Panel</button></a>
-    <a href="{{ url_for('all_robots_view') }}"><button>View All Robots</button></a>
-    <a href="{{ url_for('create_robot_view' ) }}"><button>Create a Robot</button></a>
-    <a href="{{ url_for( 'display_view' ) }}"><button>Display Test</button></a>
-    <!-- <a href="/docs"><button>API Docs</button></a> -->
+<header style="margin-bottom: 1rem;">
+    <nav class="ui centered fluid menu">
+
+        <a class="item" href="/">Home</a>
+        <a class="item" href="{{ url_for('control_panel_view') }}">Control Panel</a>
+        <a class="item" href="{{ url_for('all_robots_view') }}">View All Robots</a>
+        <a class="item" href="{{ url_for('create_robot_view' ) }}">Create a Robot</a>
+        <a class="item" href="{{ url_for( 'display_view' ) }}">Display Test</a>
+        <a class="item" href="/docs">API Docs</a>
+    </nav>
 </header>
