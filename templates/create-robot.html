@@ -2,16 +2,20 @@
 
 {% block content %}
 
-<h1>Create a Robot</h1>
-<p>For multi-robot input, separate with commas</p>
-<label for="name-input">Robot's Display Name</label>
-<input type="text" id="name">
-<button id="create">Create</button>
-<select name="weight" id="weight">
-    <option value="ANT">Antweight</option>
-    <option value="PLANT">Plastic Ant</option>
-    <option value="BEETLE">Beetleweight</option>
-</select>
+
+<div class="ui container">
+    <p>Enter a name or a comma-separated list of names. Be careful, I haven't added editing yet.</p>
+    <div class="ui fluid action input">
+        <select name="weight" id="weight">
+            <option value="ANT">Antweight</option>
+            <option value="PLANT">Plastic Ant</option>
+            <option value="BEETLE">Beetleweight</option>
+        </select>
+        <input type="text" id="name-input" placeholder="Name or comma-separated list">
+        <button class="ui button" id="create">Create</button>
+        
+    </div>
+</div>
 
 {% endblock %}
 
