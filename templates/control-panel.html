@@ -6,87 +6,111 @@
 
 {% block content %}
 
-<div class="ui container">
+<div class="ui stackable padded grid">
+    
+    <div class="twelve wide column">
+        <div class="ui segment raised">
+            <h2 class="ui dividing header">Match Setup</h2>
 
+            <div class="ui form">
 
+                <div class="three fields">
+                    <div class="field">
 
-    <div class="ui segment">
-        <h2 class="ui dividing header">Match Setup</h2>
+                        <button class="ui fluid button" data-weight="ANT">Antweight</button>
+                    </div>
+                    <div class="field">
 
-        <div class="ui form">
+                        <button class="ui fluid button" data-weight="PLANT">Plastic Ant</button>
+                    </div>
+                    <div class="field">
 
-            <div class="three fields">
-                <div class="field">
-
-                    <button class="ui fluid button" data-weight="ANT">Antweight</button>
-                </div>
-                <div class="field">
-
-                    <button class="ui fluid button" data-weight="PLANT">Plastic Ant</button>
-                </div>
-                <div class="field">
-
-                    <button class="ui fluid button" data-weight="BEETLE">Beetleweight</button>
-                </div>
-
-            </div>
-
-            <div class="two fields">
-
-                <div class="field">
-                    <div class="ui labeled input">
-                        <label for="red-robot-select" class="ui red label">Red</label>
-                        <select data-select="red" name="red-robot-select" id="red-robot-select"></select>
+                        <button class="ui fluid button" data-weight="BEETLE">Beetleweight</button>
                     </div>
 
                 </div>
-                <div class="field">
-                    <div class="ui labeled input">
-                        <label class="ui blue label">Blue</label>
-                        <select data-select="blue" name="blue-robot-select" id="blue-robot-select"></select>
+
+                <div class="two fields">
+
+                    <div class="field">
+                        <div class="ui labeled input">
+                            <label for="red-robot-select" class="ui red label">Red</label>
+                            <select data-select="red" name="red-robot-select" id="red-robot-select"></select>
+                        </div>
+
                     </div>
+                    <div class="field">
+                        <div class="ui labeled input">
+                            <label class="ui blue label">Blue</label>
+                            <select data-select="blue" name="blue-robot-select" id="blue-robot-select"></select>
+                        </div>
 
+                    </div>
                 </div>
-            </div>
 
-            <button id="create-match" class="ui fluid button">Create Match</button>
+                <button id="create-match" class="ui fluid button">Create Match</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="four wide column">
+        <div class="ui segment raised">
+            <h2 class="ui dividing header">Time Control</h2>
+            <div class="ui form">
+                <div class="field">
+
+                    <button class="ui fluid button" id="timer-reset">Reset</button>
+                </div>
+                <div class="field">
+
+
+                    <div class="ui fluid action input">
+                        <input type="number" name="inc-time" id="inc-time" placeholder="...">
+                        <button class="ui button">Add</button>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 
-    <div class="ui segment">
-        <h2 class="ui dividing header">Match Results</h2>
-        <div class="ui form">
-            <div class="three fields">
-                <div class="field">
-                    <button class="ui fluid button" data-result="JUDGE">Judge</button>
+    <div class="twelve wide column">
+        <div class="ui segment raised">
+            <h2 class="ui dividing header">Match Results</h2>
+            <div class="ui form">
+                <div class="three fields">
+                    <div class="field">
+                        <button class="ui fluid button" data-result="JUDGE">Judge</button>
+                    </div>
+                    <div class="field">
+                        <button class="ui fluid button" data-result="KO">Knockout</button>
+                    </div>
+                    <div class="field">
+                        <button class="ui fluid button" data-result="TO">Tapout</button>
+                    </div>
                 </div>
-                <div class="field">
-                    <button class="ui fluid button" data-result="KO">Knockout</button>
-                </div>
-                <div class="field">
-                    <button class="ui fluid button" data-result="TO">Tapout</button>
-                </div>
-            </div>
 
-            <div class="three fields">
-                <div class="field">
-                    <buttton class="ui fluid red button" data-winner="red">Red</buttton>
+                <div class="three fields">
+                    <div class="field">
+                        <buttton class="ui fluid red button" data-winner="red">Red</buttton>
+                    </div>
+                    <div class="field">
+                        <buttton class="ui fluid blue button" data-winner="blue">Blue</buttton>
+                    </div>
+                    <div class="field">
+                        <button class="ui fluid basic button" data-winner="undetermined">Undetermined</button>
+                    </div>
                 </div>
-                <div class="field">
-                    <buttton class="ui fluid blue button" data-winner="blue">Blue</buttton>
-                </div>
-                <div class="field">
-                    <button class="ui fluid basic button" data-winner="undetermined">Undetermined</button>
-                </div>
+                <button class=" ui fluid button" id="update-result-type">Update</button>
+
             </div>
-            <button class=" ui fluid button" id="update-result-type">Update</button>
 
         </div>
 
     </div>
+
 
 </div>
-
 
 
 {% endblock %}
