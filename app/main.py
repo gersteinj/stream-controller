@@ -2,6 +2,7 @@ from fastapi import Depends, FastAPI, HTTPException, WebSocket, WebSocketDisconn
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 import json
 
@@ -11,7 +12,22 @@ from .myEnums import Weights
 
 models.Base.metadata.create_all(bind=engine)
 
+origins = [
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+]
+
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.mount('/static', StaticFiles(directory='static'), name='static')
 templates = Jinja2Templates(directory='templates')
@@ -72,8 +88,10 @@ def create_robot(robot: schemas.RobotIn, db: Session = Depends(get_db)):
     # db_robot = crud.get_robot_by_display_name(db, display_name=robot.display_name)
     # if db_robot:
     #     raise HTTPException(status_code=400, detail="Name already used!")
-    db_robot = crud.create_robot(db=db, robot_in=robot)
-    
+    try:
+        db_robot = crud.create_robot(db=db, robot_in=robot)
+    except:
+        raise HTTPException(status_code=400, detail="Something went wrong, I'll make this more detailed and helpful eventually")
     return db_robot
 
 @app.get('/robots/id/{robot_id}', response_model=schemas.Robot)
