@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="lofi">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -8,46 +8,25 @@
   {% block headScripts %}
 
   {% endblock headScripts %}
-
-  <link href="https://cdn.jsdelivr.net/npm/daisyui@2.52.0/dist/full.css" rel="stylesheet" type="text/css" />
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.9.2/dist/semantic.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.9.2/dist/semantic.min.js"></script>
   <title>{{ title }}</title>
 </head>
 
 <body>
-
-  <nav class="navbar bg-base-200">
-    <div class="navbar-start">
-      <div class="dropdown">
-        <label tabindex="0" class="btn btn-ghost btn-circle">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
-        </label>
-        <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-200 rounded-box w-40">
-          <li><a href="/">Home</a></li>
-          <li><a href="{{ url_for('control_panel_view' ) }}">Control Panel</a></li>
-          <li><a href="{{ url_for('all_robots_view') }}">View All Robots</a></li>
-          <li><a href="{{ url_for('create_robot_view' ) }}">Create a Robot</a></li>
-          <li><a href="{{ url_for( 'display_view' ) }}">Display Test</a></li>
-
-        </ul>
-      </div>
-    </div>
-    <div class="navbar-center">
-      <a href="/" class="btn btn-ghost normal-case text-xl">Stream Control</a>
-    </div>
-
-    <div class="navbar-end">
-      <p>Status, maybe?</p>
-    </div>
-  </nav>
-  
-  <div class="container p-4 mx-auto">
-
-    <h1 class="text-3xl mb-4">{{ title }}</h1>
-    {% block content %}{% endblock content %}
+  {% include 'layouts/partials/header.html' %}
+  <div class="ui text container" style="margin-bottom: 1rem;">
+    <h1 class="ui center aligned header">{{ title }}</h1>
   </div>
 
-  {% block bodyScripts %}{% endblock bodyScripts %}
+  {% block content %}
+
+  {% endblock content %}
+
+  {% block bodyScripts %}
+
+  {% endblock bodyScripts %}
 </body>
 
 </html>

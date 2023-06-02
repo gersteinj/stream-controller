@@ -6,98 +6,117 @@
 
 {% block content %}
 
-<div class="grid grid-cols-5 gap-4 grid-flow-row-dense">
+<div class="ui stackable padded grid">
+    
+    <div class="twelve wide column">
+        <div class="ui segment raised">
+            <h2 class="ui dividing header">Match Setup</h2>
 
-    <div class="col-span-full sm:col-span-3 lg:col-span-2 card bg-base-300 text-base-content shadow-xl">
-        <div class="card-body">
-            <h2 class="card-title">Match Creation</h2>
-            <p>Directions go here</p>
+            <div class="ui form">
 
-            <div class="card-actions flex-col items-stretch">
-                <div class="btn-group w-full">
+                <div class="three fields">
+                    <div class="field">
 
-                    <button class="btn btn-primary grow" data-weight="ANT">Ant</button>
-                    <button class="btn btn-primary grow" data-weight="PLANT">Plant</button>
-                    <button class="btn btn-primary grow" data-weight="BEETLE">Beetle</button>
+                        <button class="ui fluid button" data-weight="ANT">Antweight</button>
+                    </div>
+                    <div class="field">
+
+                        <button class="ui fluid button" data-weight="PLANT">Plastic Ant</button>
+                    </div>
+                    <div class="field">
+
+                        <button class="ui fluid button" data-weight="BEETLE">Beetleweight</button>
+                    </div>
+
                 </div>
 
-                <div class="flex flex-col lg:flex-row gap-2">
+                <div class="two fields">
 
-                    <label class="input-group input-group-vertical">
-                        <span class="bg-red-900 text-white label-text">Red</span>
-                        <select class="select select-bordered text-red-900 bg-red-50 text-lg" data-select="red"
-                            name="red-robot-select" id="red-robot-select"></select>
-                    </label>
-                    <label class="input-group input-group-vertical">
-                        <span class="bg-blue-900 text-white label-text">Blue</span>
-                        <select class="select select-bordered text-blue-900 bg-blue-50 text-lg" data-select="blue"
-                            name="blue-robot-select" id="blue-robot-select"></select>
-                    </label>
+                    <div class="field">
+                        <div class="ui labeled input">
+                            <label for="red-robot-select" class="ui red label">Red</label>
+                            <select data-select="red" name="red-robot-select" id="red-robot-select"></select>
+                        </div>
+
+                    </div>
+                    <div class="field">
+                        <div class="ui labeled input">
+                            <label class="ui blue label">Blue</label>
+                            <select data-select="blue" name="blue-robot-select" id="blue-robot-select"></select>
+                        </div>
+
+                    </div>
                 </div>
 
-                <button class="btn btn-primary grow" id="create-match">Set Match</button>
+                <button id="create-match" class="ui fluid button">Create Match</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="four wide column">
+        <div class="ui segment raised">
+            <h2 class="ui dividing header">Time Control</h2>
+            <div class="ui form">
+                <div class="field">
+
+                    <button class="ui fluid button" id="timer-reset">Reset</button>
+                </div>
+                <div class="field">
+
+
+                    <div class="ui fluid action input">
+                        <input type="number" name="inc-time" id="inc-time" placeholder="...">
+                        <button class="ui button">Add</button>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 
-    <div class="col-span-3 lg:col-span-2 xl:col-span-1 card bg-base-300 text-base-content shadow-xl">
-        <div class="card-body">
-            <h2 class="card-title">Match Results</h2>
-            <p>Directions go here</p>
-
-            <div class="card-actions flex-col items-stretch">
-
-                <select class="select select-bordered text-lg" id="results-select">
-                    <option value="KO">Knockout</option>
-                    <option value="TO">Tapout</option>
-                    <option value="JUDGE">Judge</option>
-                </select>
-                <div class="btn-group">
-                    <button class="btn bg-red-900 text-white w-1/2">Red</button>
-                    <button class="btn bg-blue-900 text-white w-1/2">Blue</button>
+    <div class="twelve wide column">
+        <div class="ui segment raised">
+            <h2 class="ui dividing header">Match Results</h2>
+            <div class="ui form">
+                <div class="three fields">
+                    <div class="field">
+                        <button class="ui fluid button" data-result="JUDGE">Judge</button>
+                    </div>
+                    <div class="field">
+                        <button class="ui fluid button" data-result="KO">Knockout</button>
+                    </div>
+                    <div class="field">
+                        <button class="ui fluid button" data-result="TO">Tapout</button>
+                    </div>
                 </div>
-                <div class="btn-group">
-                    <button class="btn btn-primary w-1/2">Update</button>
-                    <button class="btn btn-primary w-1/2">Reset</button>
+
+                <div class="three fields">
+                    <div class="field">
+                        <buttton class="ui fluid red button" data-winner="red">Red</buttton>
+                    </div>
+                    <div class="field">
+                        <buttton class="ui fluid blue button" data-winner="blue">Blue</buttton>
+                    </div>
+                    <div class="field">
+                        <button class="ui fluid basic button" data-winner="undetermined">Undetermined</button>
+                    </div>
                 </div>
+                <button class=" ui fluid button" id="update-result-type">Update</button>
+
             </div>
+
         </div>
+
     </div>
 
-    <div class="col-span-2 lg:col-span-1 card bg-base-300 text-base-content shadow-xl">
-        <div class="card-body">
-            <h2 class="card-title">Time Control</h2>
-            <p>Directions go here</p>
-            <div class="card-actions flex-col items-stretch">
 
-                <button class="btn btn-primary" id="reset-time">Reset</button>
-                <div class="input-group input-group-vertical">
-                    <input class="input input-bordered" type="number" id="time-input">
-                    <button class="btn btn-primary" id="increment-time">Add Time</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="bg-primary text-primary-content p-4">Placeholder 1</div>
-    <div class="bg-primary text-primary-content p-4">Placeholder 2</div>
-    <div class="bg-primary text-primary-content p-4">Placeholder 3</div>
-    <div class="bg-primary text-primary-content p-4">Placeholder 4</div>
-    <div class="bg-primary text-primary-content p-4">Placeholder 5</div>
-    <div class="bg-primary text-primary-content p-4">Placeholder 6</div>
-    <div class="bg-primary text-primary-content p-4">Placeholder 7</div>
-    <div class="bg-primary text-primary-content p-4">Placeholder 8</div>
-    <div class="bg-primary text-primary-content p-4">Placeholder 9</div>
-    <div class="bg-primary text-primary-content p-4">Placeholder 10</div>
-    <div class="bg-primary text-primary-content p-4">Placeholder 11</div>
-    <div class="bg-primary text-primary-content p-4">Placeholder 12</div>
-    <div class="bg-primary text-primary-content p-4">Placeholder 13</div>
-    <div class="bg-primary text-primary-content p-4">Placeholder 14</div>
 </div>
+
 
 {% endblock %}
 
 {% block bodyScripts %}
+
 <script type="module">
 
     // imports

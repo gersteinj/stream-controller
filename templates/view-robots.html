@@ -1,27 +1,25 @@
 {% extends 'layouts/ui-base.html' %}
 
 {% block content %}
+<div class="ui container">
 
-<div class="btn-group">
-
-    <button class="btn btn-link" data-weight="ALL">All Robots</button>
-    <button class="btn btn-link" data-weight="ANT">Antweight</button>
-    <button class="btn btn-link" data-weight="PLANT">Plastic Ant</button>
-    <button class="btn btn-link" data-weight="BEETLE">Beetleweight</button>
+    <div class="ui top attached centered inverted menu">
+        <a class="ui item" data-weight="ALL">All Robots</a>
+        <a class="ui item" data-weight="ANT">Antweight</a>
+        <a class="ui item" data-weight="PLANT">Plastic Ant</a>
+        <a class="ui item" data-weight="BEETLE">Beetleweight</a>
+    </div>
+    <table class="ui bottom attached table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Weight</th>
+            </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+    </table>
 </div>
-
-
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Weight</th>
-        </tr>
-    </thead>
-    <tbody id="table-body"></tbody>
-</table>
 {% endblock %}
 
 {% block bodyScripts %}
