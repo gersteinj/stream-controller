@@ -25,19 +25,23 @@ import UILayout from "@layouts/UILayout.astro";
       <legend>Select Robots</legend>
       <label>
         <span>Red</span>
-        <select data-select="red" name="red-robot-select" id="red-robot-select"></select>
+        <select data-select="red" name="red-robot-select" id="red-robot-select"
+        ></select>
       </label>
       <label>
         <span>Blue</span>
-        <select data-select="blue" name="blue-robot-select" id="blue-robot-select"></select>
+        <select
+          data-select="blue"
+          name="blue-robot-select"
+          id="blue-robot-select"></select>
       </label>
     </fieldset>
     <fieldset>
       <legend>Next Match</legend>
-      <p>ID: <span id="id-next">?</span></p>
+      <!-- <p>ID: <span id="id-next">?</span></p>
       <p id="weight-next">?</p>
       <p id="red-next">?</p>
-      <p id="blue-next">?</p>
+      <p id="blue-next">?</p> -->
       <button id="create-match">Create Match</button>
     </fieldset>
   </fieldset>
@@ -53,73 +57,72 @@ import UILayout from "@layouts/UILayout.astro";
 <script>
   import { getRobotList, postNewMatch } from "@scripts/utilities";
 
-  import mqtt_client from 'u8-mqtt';
+  const weightPickers = document.getElementsByName("weight");
+  const robotSelects = document.querySelectorAll("[data-select]");
+  const createBtn = document.getElementById("create-match");
+  const resetTimeBtn = document.getElementById("time-reset");
+  const timeInput = document.getElementById("time-inc");
+  const addTimeBtn = document.getElementById("time-add");
+
+  // Dealing with MQTT
+
+  import mqtt_client from "u8-mqtt";
   let my_mqtt = mqtt_client()
-    .with_websock('wss://test.mosquitto.org:8081')
-    .with_autoreconnect()
-  
+    .with_websock("wss://test.mosquitto.org:8081")
+    .with_autoreconnect();
+
   await my_mqtt.connect();
 
-  document.getElementById('time-reset').addEventListener('click', () => {
-    my_mqtt.send('timecontrol', 'r');
-  })
+  resetTimeBtn.addEventListener("click", () => {
+    my_mqtt.send("timecontrol", "r");
+  });
 
-  document.getElementById('time-add').addEventListener('click', () => {
-    let t = document.getElementById('time-inc').value;
-    my_mqtt.send('timecontrol', `a${t}`);
-  })
+  addTimeBtn.addEventListener("click", () => {
+    let t = timeInput.value;
+    my_mqtt.send("timecontrol", `a${t}`);
+  });
 
-  const weightPickers = document.getElementsByName("weight");
   const optionSets = {};
-  const robotSelects = document.querySelectorAll('[data-select]');
-  const createBtn = document.getElementById("create-match");
 
   let activeWeightClass = "";
 
   weightPickers.forEach((radioBtn) => {
-    // Setup
+    // do stuff for each weight class
     let weight = radioBtn.value;
     if (radioBtn.checked) {
       activeWeightClass = weight;
     }
     optionSets[weight] = "";
-    getRobotList(weight).then((robotList) => {
-      robotList.forEach((robot) => {
+    let robotList = getRobotList(weight);
+    robotList.then((data) => {
+      // console.log(weight, data);
+      data.forEach((robot) => {
+        // Everything in here happens for each robot in the weight class
         let { robot_name, id } = robot;
         let opt = `<option value="${id}">${robot_name}</option>`;
         optionSets[weight] += opt;
       });
-      robotSelects.forEach(
-        (select) => (select.innerHTML = optionSets[activeWeightClass])
-      );
+      // console.log(weight, optionSets[weight]);
+      if (weight == activeWeightClass) {
+        robotSelects.forEach(
+          (dropdown) => (dropdown.innerHTML = optionSets[weight])
+        );
+      }
     });
-    // Add event listner to update selects
-    radioBtn.addEventListener("click", () => {
-      console.log(optionSets[radioBtn.value]);
+    radioBtn.addEventListener('change', () => {
       activeWeightClass = radioBtn.value;
-      robotSelects.forEach(
-        (select) => (select.innerHTML = optionSets[activeWeightClass])
-      );
-      document.getElementById("weight-next").innerText = activeWeightClass;
-      document.getElementById('red-next').innerText = '?'
-      document.getElementById('blue-next').innerText = '?'
-    });
+      robotSelects.forEach( dropdown => dropdown.innerHTML = optionSets[activeWeightClass]);
+    })
   });
 
-  robotSelects.forEach(botSelect => {
-    console.log(botSelect);
-    botSelect.addEventListener('change', () => {
-      document.getElementById(`${botSelect.dataset.select}-next`).innerText = botSelect.selectedOptions[0].text;
-    });
-  });
-
-  createBtn.addEventListener("click", () => {
+  createBtn.addEventListener('click', () => {
     postNewMatch(
       document.getElementById("red-robot-select").value,
       document.getElementById("blue-robot-select").value,
       activeWeightClass
-    );
-  });
+    )
+  })
+
 </script>
 
 <style>

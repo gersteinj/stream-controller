@@ -12,22 +12,8 @@ import UILayout from '@layouts/UILayout.astro';
 
 <script>
     import { getLatestMatchID, getMatchDetails } from '@scripts/utilities';
-
-    const ws = new WebSocket('ws://localhost:8000/ws/display');
-    ws.onopen = function(event) {
-        console.log('connected');
-        getLatestMatchID().then(id => displayMatchInfo( id, matchDisplayElements));
-    }
-    ws.onmessage = function(event) {
-        let msg = JSON.parse(event.data);
-        console.log(msg);
-        if (msg.event_type == 'new_match') {
-            displayMatchInfo(msg.data, matchDisplayElements);
-        }
-    }
-
+    
     const updateBtn = document.getElementById('force-update');
-
     const matchDisplayElements = {
         weightTarget: document.getElementById('weight'),
         idTarget: document.getElementById('match-id'),
@@ -46,12 +32,20 @@ import UILayout from '@layouts/UILayout.astro';
         })
     }
 
-    updateBtn.addEventListener('click', () => {
+    const ws = new WebSocket('ws://localhost:8000/ws/display');
+    ws.onopen = function(event) {
+        console.log('connected');
         getLatestMatchID().then(id => displayMatchInfo( id, matchDisplayElements));
-        
+    }
+    ws.onmessage = function(event) {
+        let msg = JSON.parse(event.data);
+        console.log(msg);
+        if (msg.event_type == 'new_match') {
+            displayMatchInfo(msg.data, matchDisplayElements);
+        }
+    }
+
+    updateBtn.addEventListener('click', () => {
+        getLatestMatchID().then(id => displayMatchInfo( id, matchDisplayElements));  
     })
-    
-    
-
-
 </script>
