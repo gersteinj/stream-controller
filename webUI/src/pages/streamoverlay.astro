@@ -1,0 +1,114 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Stream Overlay">
+  <div id="overlay-bar">
+    <div id="red-bar">
+      <p id="red-bot">Red Robot</p>
+    </div>
+    <div id="time-bar">
+      <p id="time-remaining">150</p>
+    </div>
+    <div id="blue-bar">
+      <p id="blue-bot">Blue Robot</p>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  import { getLatestMatchID, getMatchDetails } from "@scripts/utilities";
+  
+  const displayTargets = {
+    redBot: document.getElementById("red-bot"),
+    blueBot: document.getElementById("blue-bot"),
+  };
+  const timeDisplay = document.getElementById("time-remaining");
+
+  import mqtt_client from 'u8-mqtt';
+  let my_mqtt = mqtt_client()
+    .with_websock('wss://test.mosquitto.org:8081')
+    .with_autoreconnect();
+
+    await my_mqtt.connect();
+
+    my_mqtt.subscribe_topic('botcontrol', (pkt, params, ctx) => {
+        console.log('Arena says:', pkt.json());
+        let arenaJSON = pkt.json();
+        // arenaDisplayElements.matchStateTarget.innerText = arenaJSON.Match_State;
+        timeDisplay.innerText = arenaJSON.Match_Sec_remain;
+        
+
+    })
+
+
+  function displayMatchInfo(matchID, displayTargets) {
+    getMatchDetails(matchID).then((data) => {
+      const { red_robot, blue_robot } = data;
+      const { redBot, blueBot } = displayTargets;
+      redBot.innerText = red_robot.robot_name;
+      blueBot.innerText = blue_robot.robot_name;
+    });
+  }
+  const ws = new WebSocket("ws://localhost:8000/ws/display");
+  ws.onopen = function (event) {
+    console.log("connected");
+    getLatestMatchID().then((id) => displayMatchInfo(id, displayTargets));
+  };
+
+  ws.onmessage = function(event) {
+    let msg = JSON.parse(event.data);
+    if (msg.event_type == 'new_match') {
+        displayMatchInfo(msg.data, displayTargets);
+    }
+  }
+</script>
+
+<style>
+  /* the props */
+  @import "open-props/open-props.min.css";
+
+  /* optional imports that use the props */
+  @import "open-props/normalize.min.css";
+
+  body {
+    background-image: var(--gradient-3);
+    padding: var(--size-4);
+  }
+
+  #overlay-bar {
+    display: grid;
+    grid-template-columns: 3fr 1fr 3fr;
+    width: 70%;
+    margin-inline: auto;
+  }
+
+  #overlay-bar > div {
+    display: flex;
+    flex-direction: row;
+    padding-inline: var(--size-6);
+  }
+
+  #overlay-bar p {
+    font-size: var(--font-size-6);
+    font-weight: var(--font-weight-8);
+  }
+
+  #red-bar {
+    background-color: var(--red-8);
+    color: var(--gray-0);
+    justify-content: end;
+  }
+
+  #time-bar {
+    background-color: var(--gray-0);
+    color: var(--gray-11);
+    justify-content: center;
+  }
+
+  #blue-bar {
+    background-color: var(--blue-8);
+    color: var(--gray-0);
+    justify-content: start;
+  }
+</style>
