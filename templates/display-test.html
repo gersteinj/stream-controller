@@ -5,13 +5,20 @@
 {% endblock headScripts %}
 
 {% block content %}
-<h1>Display Test</h1>
-<p>Displays everything. Primarily intended for troubleshooting purposes</p>
-<button id="update-all">Force Refresh</button>
-<h2>Current Match</h2>
-<p><span id="weight">Weight Class</span> <span id="red-bot">Red</span> <span id="blue-bot">Blue</span></p>
+<div class="ui container">
 
-<style>
+    <p>Displays everything. Primarily intended for troubleshooting purposes</p>
+    <button class="ui fluid button" id="update-all">Force Refresh</button>
+
+    <div class="ui segment">
+        <h2 class="ui dividing header">Current Match</h2>
+        <p><span class="ui big text" id="weight">Weight Class: </span><span id="red-bot" class="ui big red text">Red Robot</span> vs <span id="blue-bot" class="ui big blue text">Blue Robot</span></p>
+    </div>
+
+</div>
+
+
+<!-- <style>
     #red-bot {
         text-shadow: 0 0 3px red, 0 0 5px red;
     }
@@ -19,7 +26,7 @@
     #blue-bot {
         text-shadow: 0 0 3px #59f, 0 0 5px #59f;
     }
-</style>
+</style> -->
 
 {% endblock %}
 
