@@ -5,65 +5,94 @@
 {% endblock headScripts %}
 
 {% block content %}
-<h1>Control Panel</h1>
 
-<fieldset>
-    <legend>Match Setup</legend>
-    <!-- <h2>Match Setup</h2> -->
-    <div>
-        <button data-weight="ANT">Antweight</button>
-        <button data-weight="PLANT">Plastic Ant</button>
-        <button data-weight="BEETLE">Beetleweight</button>
+<div class="ui container">
+
+
+
+    <div class="ui segment">
+        <h2 class="ui dividing header">Match Setup</h2>
+
+        <div class="ui form">
+
+            <div class="three fields">
+                <div class="field">
+
+                    <button class="ui fluid button" data-weight="ANT">Antweight</button>
+                </div>
+                <div class="field">
+
+                    <button class="ui fluid button" data-weight="PLANT">Plastic Ant</button>
+                </div>
+                <div class="field">
+
+                    <button class="ui fluid button" data-weight="BEETLE">Beetleweight</button>
+                </div>
+
+            </div>
+
+            <div class="two fields">
+
+                <div class="field">
+                    <div class="ui labeled input">
+                        <label for="red-robot-select" class="ui red label">Red</label>
+                        <select data-select="red" name="red-robot-select" id="red-robot-select"></select>
+                    </div>
+
+                </div>
+                <div class="field">
+                    <div class="ui labeled input">
+                        <label class="ui blue label">Blue</label>
+                        <select data-select="blue" name="blue-robot-select" id="blue-robot-select"></select>
+                    </div>
+
+                </div>
+            </div>
+
+            <button id="create-match" class="ui fluid button">Create Match</button>
+        </div>
     </div>
-    <div>
 
-        <select data-select="red" name="red-robot-select" id="red-robot-select"></select>
-        <select data-select="blue" name="blue-robot-select" id="blue-robot-select"></select>
-        <button id="create-match">Set Match</button>
+    <div class="ui segment">
+        <h2 class="ui dividing header">Match Results</h2>
+        <div class="ui form">
+            <div class="three fields">
+                <div class="field">
+                    <button class="ui fluid button" data-result="JUDGE">Judge</button>
+                </div>
+                <div class="field">
+                    <button class="ui fluid button" data-result="KO">Knockout</button>
+                </div>
+                <div class="field">
+                    <button class="ui fluid button" data-result="TO">Tapout</button>
+                </div>
+            </div>
+
+            <div class="three fields">
+                <div class="field">
+                    <buttton class="ui fluid red button" data-winner="red">Red</buttton>
+                </div>
+                <div class="field">
+                    <buttton class="ui fluid blue button" data-winner="blue">Blue</buttton>
+                </div>
+                <div class="field">
+                    <button class="ui fluid basic button" data-winner="undetermined">Undetermined</button>
+                </div>
+            </div>
+            <button class=" ui fluid button" id="update-result-type">Update</button>
+
+        </div>
+
     </div>
-</fieldset>
 
-
-
-
-<fieldset>
-    <legend>Match Results</legend>
-    <div>
-        <label for="jd">Judge's Decision</label>
-        <input type="radio" name="result-type" id="jd" value="JUDGE">
-        <label for="ko">Knockout</label>
-        <input type="radio" name="result-type" id="ko" value="KNOCKOUT">
-        <label for="to">Tapout</label>
-        <input type="radio" name="result-type" id="to" value="TAPOUT">
-    </div>
-    <button id="update-result-type">Update</button>
-    <button id="clear-result-type">Clear</button>
-
-    <hr>
-
-    <div>
-        <label for="blue">Blue Wins</label>
-        <input type="radio" name="winner-radio" id="blue" value="blue">
-        <label for="red">Red Wins</label>
-        <input type="radio" name="winner-radio" id="red" value="red">
-    </div>
-    <button id="update-winner">Update</button>
-    <button id="clear-winner">Clear</button>
-</fieldset>
-
-<fieldset>
-    <legend>Time Control</legend>
-    <button id="reset-time">Reset Timer</button>
-    <label for="time-input">Seconds to Add</label>
-    <input type="number" id="time-input">
-    <button id="increment-time">Add Time</button>
-</fieldset>
+</div>
 
 
 
 {% endblock %}
 
 {% block bodyScripts %}
+
 <script type="module">
 
     // imports
@@ -87,31 +116,31 @@
     const resultTypeRadios = document.getElementsByName('result-type');
     const resultTypeUpdate = document.getElementById('update-result-type');
     const resultTypeClear = document.getElementById('clear-result-type');
-    
+
     resultTypeUpdate.addEventListener('click', () => {
         let selected = null;
         resultTypeRadios.forEach(radio => {
-                if (radio.checked) {
-                    selected = radio.value;
-                }
-            })
+            if (radio.checked) {
+                selected = radio.value;
+            }
+        })
         console.log(selected);
     });
     resultTypeClear.addEventListener('click', () => {
         resultTypeRadios.forEach(radio => radio.checked = false);
     });
-    
+
     const winnerRadios = document.getElementsByName('winner-radio');
     const winnerUpdate = document.getElementById('update-winner');
     const winnerClear = document.getElementById('clear-winner');
-    
+
     winnerUpdate.addEventListener('click', () => {
         let selected = null;
         winnerRadios.forEach(radio => {
-                if (radio.checked) {
-                    selected = radio.value;
-                }
-            })
+            if (radio.checked) {
+                selected = radio.value;
+            }
+        })
         console.log(selected);
     });
     winnerClear.addEventListener('click', () => {
