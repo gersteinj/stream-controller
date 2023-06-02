@@ -1,0 +1,50 @@
+---
+import UILayout from '@layouts/UILayout.astro';
+---
+
+<UILayout title="Create a Robot">
+<p>Enter a name or a comma-separated list of names. Be careful, I haven't added editing yet.</p>
+<fieldset>
+    <legend>Create a Robot</legend>
+    <select name="weight" id="weight">
+        <option value="ANT">Antweight</option>
+        <option value="PLANT">Plastic Ant</option>
+        <option value="BEETLE">Beetleweight</option>
+    </select>
+    <input type="text" id="name-input" placeholder="Name or comma-separated list">
+    <button id="create">Create</button>
+</fieldset>
+
+</UILayout>
+
+<script>
+    import { postNewRobot } from '@scripts/utilities';
+    const weightSelect = document.getElementById('weight');
+    const nameInput = document.getElementById('name-input');
+    const createBtn = document.getElementById('create');
+
+    function splitNames(nameString) {
+        return nameString.split(',').map( botString => botString.trim() ).filter( botString => botString.length > 0);
+    }
+
+    function confirmNames(nameList) {
+        return confirm(`Split correctly?\n\n${nameList.join('\n')}`);
+    }
+    
+    createBtn.addEventListener('click', () => {
+        let weight = weightSelect.value;
+        let names = splitNames(nameInput.value);
+        if ( names.length > 1) {
+            if( !confirmNames(names) ) {
+                console.log('canceled');
+                return 'canceled';
+            }
+        }
+        
+        names.forEach( robotName => {
+            postNewRobot(robotName, weight).then(data => console.log(data));
+        });
+    });
+
+    
+</script>

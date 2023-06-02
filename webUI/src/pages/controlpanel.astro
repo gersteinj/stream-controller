@@ -1,0 +1,151 @@
+---
+import UILayout from "@layouts/UILayout.astro";
+---
+
+<UILayout title="Control Panel">
+  <fieldset id="panel-create-match">
+    <legend>Create Match</legend>
+    <fieldset>
+      <legend>Weight Class</legend>
+      <label>
+        <input type="radio" name="weight" id="weight-ANT" value="ANT" checked />
+        <span>Antweight</span>
+      </label>
+      <label>
+        <input type="radio" name="weight" id="weight-PLANT" value="PLANT" />
+        <span>Plastic Ant</span>
+      </label>
+      <label>
+        <input type="radio" name="weight" id="weight-BEETLE" value="BEETLE" />
+        <span>Beetleweight</span>
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Select Robots</legend>
+      <label>
+        <span>Red</span>
+        <select data-select="red" name="red-robot-select" id="red-robot-select"></select>
+      </label>
+      <label>
+        <span>Blue</span>
+        <select data-select="blue" name="blue-robot-select" id="blue-robot-select"></select>
+      </label>
+    </fieldset>
+    <fieldset>
+      <legend>Next Match</legend>
+      <p>ID: <span id="id-next">?</span></p>
+      <p id="weight-next">?</p>
+      <p id="red-next">?</p>
+      <p id="blue-next">?</p>
+      <button id="create-match">Create Match</button>
+    </fieldset>
+  </fieldset>
+
+  <fieldset id="panel-time-control">
+    <legend>Time Control</legend>
+    <button id="time-reset">Reset Timer</button>
+    <input type="number" name="time-inc" id="time-inc" />
+    <button id="time-add">Add Time</button>
+  </fieldset>
+</UILayout>
+
+<script>
+  import { getRobotList, postNewMatch } from "@scripts/utilities";
+
+  import mqtt_client from 'u8-mqtt';
+  let my_mqtt = mqtt_client()
+    .with_websock('wss://test.mosquitto.org:8081')
+    .with_autoreconnect()
+  
+  await my_mqtt.connect();
+
+  document.getElementById('time-reset').addEventListener('click', () => {
+    my_mqtt.send('timecontrol', 'r');
+  })
+
+  document.getElementById('time-add').addEventListener('click', () => {
+    let t = document.getElementById('time-inc').value;
+    my_mqtt.send('timecontrol', `a${t}`);
+  })
+
+  const weightPickers = document.getElementsByName("weight");
+  const optionSets = {};
+  const robotSelects = document.querySelectorAll('[data-select]');
+  const createBtn = document.getElementById("create-match");
+
+  let activeWeightClass = "";
+
+  weightPickers.forEach((radioBtn) => {
+    // Setup
+    let weight = radioBtn.value;
+    if (radioBtn.checked) {
+      activeWeightClass = weight;
+    }
+    optionSets[weight] = "";
+    getRobotList(weight).then((robotList) => {
+      robotList.forEach((robot) => {
+        let { robot_name, id } = robot;
+        let opt = `<option value="${id}">${robot_name}</option>`;
+        optionSets[weight] += opt;
+      });
+      robotSelects.forEach(
+        (select) => (select.innerHTML = optionSets[activeWeightClass])
+      );
+    });
+    // Add event listner to update selects
+    radioBtn.addEventListener("click", () => {
+      console.log(optionSets[radioBtn.value]);
+      activeWeightClass = radioBtn.value;
+      robotSelects.forEach(
+        (select) => (select.innerHTML = optionSets[activeWeightClass])
+      );
+      document.getElementById("weight-next").innerText = activeWeightClass;
+      document.getElementById('red-next').innerText = '?'
+      document.getElementById('blue-next').innerText = '?'
+    });
+  });
+
+  robotSelects.forEach(botSelect => {
+    console.log(botSelect);
+    botSelect.addEventListener('change', () => {
+      document.getElementById(`${botSelect.dataset.select}-next`).innerText = botSelect.selectedOptions[0].text;
+    });
+  });
+
+  createBtn.addEventListener("click", () => {
+    postNewMatch(
+      document.getElementById("red-robot-select").value,
+      document.getElementById("blue-robot-select").value,
+      activeWeightClass
+    );
+  });
+</script>
+
+<style>
+  #panel-create-match {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  [data-select="red"] {
+    color: #900;
+    border: 1px solid red;
+    background-color: #fee;
+  }
+
+  #red-next {
+    color: #900;
+  }
+
+  [data-select="blue"] {
+    color: #009;
+    border: 1px solid blue;
+    background-color: #eef;
+  }
+
+  #blue-next {
+    color: #009;
+  }
+</style>

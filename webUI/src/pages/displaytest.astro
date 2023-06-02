@@ -1,0 +1,57 @@
+---
+import UILayout from '@layouts/UILayout.astro';
+---
+
+<UILayout title="Display Test">
+<p>Displays everything. Primarily intended for troubleshooting purposes. Will repurpose for judges' display</p>
+<button id="force-update">Force Update</button>
+
+<h2>Current Match: <span id="match-id">?</span></h2>
+<p><span id="weight">Weight</span> - <span id="red-bot" style="color:red;">Red</span> vs <span id="blue-bot" style="color:blue;">Blue</span></p>
+</UILayout>
+
+<script>
+    import { getLatestMatchID, getMatchDetails } from '@scripts/utilities';
+
+    const ws = new WebSocket('ws://localhost:8000/ws/display');
+    ws.onopen = function(event) {
+        console.log('connected');
+        getLatestMatchID().then(id => displayMatchInfo( id, matchDisplayElements));
+    }
+    ws.onmessage = function(event) {
+        let msg = JSON.parse(event.data);
+        console.log(msg);
+        if (msg.event_type == 'new_match') {
+            displayMatchInfo(msg.data, matchDisplayElements);
+        }
+    }
+
+    const updateBtn = document.getElementById('force-update');
+
+    const matchDisplayElements = {
+        weightTarget: document.getElementById('weight'),
+        idTarget: document.getElementById('match-id'),
+        redBotTarget: document.getElementById('red-bot'),
+        blueBotTarget: document.getElementById('blue-bot')
+    };
+
+    function displayMatchInfo(matchID, matchTargets) {
+        getMatchDetails(matchID).then(data => {
+            const { id, red_robot, blue_robot, weight } = data;
+            const { weightTarget, idTarget, redBotTarget, blueBotTarget } = matchTargets;
+            weightTarget.innerText = weight;
+            idTarget.innerText = id;
+            redBotTarget.innerText = red_robot.robot_name;
+            blueBotTarget.innerText = blue_robot.robot_name;
+        })
+    }
+
+    updateBtn.addEventListener('click', () => {
+        getLatestMatchID().then(id => displayMatchInfo( id, matchDisplayElements));
+        
+    })
+    
+    
+
+
+</script>

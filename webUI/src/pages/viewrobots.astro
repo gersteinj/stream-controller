@@ -1,0 +1,48 @@
+---
+import UILayout from '@layouts/UILayout.astro';
+---
+
+<UILayout title="View Robots">
+    <fieldset>
+        <legend>Choose a Weight Class</legend>
+        <button data-weight="ALL">All Robots</button>
+        <button data-weight="ANT">Antweight</button>
+        <button data-weight="PLANT">Plastic Ant</button>
+        <button data-weight="BEETLE">Beetleweight</button>
+    </fieldset>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Weight</th>
+            </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+    </table>
+</UILayout>
+
+<script>
+    import { getRobotList } from '@scripts/utilities';
+    const weightBtns = document.querySelectorAll('[data-weight]');
+    const tbody = document.getElementById('table-body');
+
+    function buildTable(weight=null, tableBody=tbody) {
+        tableBody.innerHTML = '';
+        getRobotList(weight).then( robotList => {
+            robotList.forEach( robot => {
+                let { id, weight, robot_name } = robot;
+                let row = document.createElement('tr');
+                row.innerHTML = `<td>${id}</td><td>${weight}</td><td>${robot_name}</td>`;
+                tableBody.appendChild(row);
+            })
+        })
+    }
+
+    buildTable();
+
+    weightBtns.forEach( btn => btn.addEventListener( 'click', () => {
+        buildTable(btn.dataset.weight);
+    }));
+</script>
