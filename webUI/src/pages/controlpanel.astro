@@ -55,7 +55,7 @@ import UILayout from "@layouts/UILayout.astro";
 </UILayout>
 
 <script>
-  import { getRobotList, postNewMatch } from "@scripts/utilities";
+  import { getRobotList, postNewMatch, MQTT_WS_URL, API_URL } from "@scripts/utilities";
 
   const weightPickers = document.getElementsByName("weight");
   const robotSelects = document.querySelectorAll("[data-select]");
@@ -68,18 +68,18 @@ import UILayout from "@layouts/UILayout.astro";
 
   import mqtt_client from "u8-mqtt";
   let my_mqtt = mqtt_client()
-    .with_websock("wss://test.mosquitto.org:8081")
+    .with_websock(MQTT_WS_URL)
     .with_autoreconnect();
 
   await my_mqtt.connect();
 
   resetTimeBtn.addEventListener("click", () => {
-    my_mqtt.send("timecontrol", "r");
+    my_mqtt.send("timecontrol", "R");
   });
 
   addTimeBtn.addEventListener("click", () => {
     let t = timeInput.value;
-    my_mqtt.send("timecontrol", `a${t}`);
+    my_mqtt.send("timecontrol", `A${t}`);
   });
 
   const optionSets = {};

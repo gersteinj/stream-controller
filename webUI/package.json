@@ -12,6 +12,7 @@
   "dependencies": {
     "astro": "^2.5.6",
     "open-props": "^1.5.8",
+    "sakura.css": "^1.4.1",
     "u8-mqtt": "^0.3.2-0"
   }
 }

@@ -1,13 +1,23 @@
 ---
-import UILayout from '@layouts/UILayout.astro';
+import UILayout from "@layouts/UILayout.astro";
 ---
 
 <UILayout title="Display Test">
-<p>Displays everything. Primarily intended for troubleshooting purposes. Will repurpose for judges' display</p>
-<button id="force-update">Force Update</button>
+    <fieldset id="panel-time-control">
+        <legend>Time Control</legend>
+        <button id="time-reset">Reset Timer</button>
+        <input type="number" name="time-inc" id="time-inc" />
+        <button id="time-add">Add Time</button>
+    </fieldset>
 
-<h2>Current Match: <span id="match-id">?</span></h2>
-<p><span id="weight">Weight</span> - <span id="red-bot" style="color:red;">Red</span> vs <span id="blue-bot" style="color:blue;">Blue</span></p>
+    <button id="force-update">Force Update</button>
+
+    <h2>Current Match: <span id="match-id">?</span></h2>
+    <p>
+        <span id="weight">Weight</span> - <span id="red-bot" style="color:red;"
+            >Red</span
+        > vs <span id="blue-bot" style="color:blue;">Blue</span>
+    </p>
 </UILayout>
 
 <h2>Match State: <span id="match-state">?</span></h2>
@@ -15,60 +25,83 @@ import UILayout from '@layouts/UILayout.astro';
 <h2>Time Remaining: <span id="time-remaining"></span></h2>
 
 <script>
-    import { getLatestMatchID, getMatchDetails } from '@scripts/utilities';
-    import mqtt_client from 'u8-mqtt';
-    let my_mqtt = mqtt_client()
-    .with_websock('wss://test.mosquitto.org:8081')
-    .with_autoreconnect();
+    import {
+        getLatestMatchID,
+        getMatchDetails,
+        MQTT_WS_URL,
+        API_URL,
+        WS_URL
+    } from "@scripts/utilities";
+
+    const resetTimeBtn = document.getElementById("time-reset");
+    const timeInput = document.getElementById("time-inc");
+    const addTimeBtn = document.getElementById("time-add");
+
+    import mqtt_client from "u8-mqtt";
+    let my_mqtt = mqtt_client().with_websock(MQTT_WS_URL).with_autoreconnect();
 
     await my_mqtt.connect();
 
-    my_mqtt.subscribe_topic('botcontrol', (pkt, params, ctx) => {
-        console.log('Arena says:', pkt.json());
+    my_mqtt.subscribe_topic("botcontrol", (pkt, params, ctx) => {
+        // console.log("Arena says:", pkt.json());
         let arenaJSON = pkt.json();
         arenaDisplayElements.matchStateTarget.innerText = arenaJSON.Match_State;
-        arenaDisplayElements.timeRemainingTarget.innerText = arenaJSON.Match_Sec_remain;
+        arenaDisplayElements.timeRemainingTarget.innerText =
+            arenaJSON.Match_Sec_remain;
+    });
 
-    })
+    resetTimeBtn.addEventListener("click", () => {
+        my_mqtt.send("timecontrol", "R");
+    });
 
-    const updateBtn = document.getElementById('force-update');
+    addTimeBtn.addEventListener("click", () => {
+        let t = timeInput.value;
+        my_mqtt.send("timecontrol", `A${t}`);
+    });
+
+    const updateBtn = document.getElementById("force-update");
     const matchDisplayElements = {
-        weightTarget: document.getElementById('weight'),
-        idTarget: document.getElementById('match-id'),
-        redBotTarget: document.getElementById('red-bot'),
-        blueBotTarget: document.getElementById('blue-bot')
+        weightTarget: document.getElementById("weight"),
+        idTarget: document.getElementById("match-id"),
+        redBotTarget: document.getElementById("red-bot"),
+        blueBotTarget: document.getElementById("blue-bot"),
     };
 
     const arenaDisplayElements = {
-        matchStateTarget: document.getElementById('match-state'),
-        timeRemainingTarget: document.getElementById('time-remaining')
-    }
+        matchStateTarget: document.getElementById("match-state"),
+        timeRemainingTarget: document.getElementById("time-remaining"),
+    };
 
     function displayMatchInfo(matchID, matchTargets) {
-        getMatchDetails(matchID).then(data => {
+        getMatchDetails(matchID).then((data) => {
             const { id, red_robot, blue_robot, weight } = data;
-            const { weightTarget, idTarget, redBotTarget, blueBotTarget } = matchTargets;
+            const { weightTarget, idTarget, redBotTarget, blueBotTarget } =
+                matchTargets;
             weightTarget.innerText = weight;
             idTarget.innerText = id;
             redBotTarget.innerText = red_robot.robot_name;
             blueBotTarget.innerText = blue_robot.robot_name;
-        })
+        });
     }
 
-    const ws = new WebSocket('ws://localhost:8000/ws/display');
-    ws.onopen = function(event) {
-        console.log('connected');
-        getLatestMatchID().then(id => displayMatchInfo( id, matchDisplayElements));
-    }
-    ws.onmessage = function(event) {
+    const ws = new WebSocket(`${WS_URL}/display`);
+    ws.onopen = function (event) {
+        console.log("connected");
+        getLatestMatchID().then((id) =>
+            displayMatchInfo(id, matchDisplayElements)
+        );
+    };
+    ws.onmessage = function (event) {
         let msg = JSON.parse(event.data);
         console.log(msg);
-        if (msg.event_type == 'new_match') {
+        if (msg.event_type == "new_match") {
             displayMatchInfo(msg.data, matchDisplayElements);
         }
-    }
+    };
 
-    updateBtn.addEventListener('click', () => {
-        getLatestMatchID().then(id => displayMatchInfo( id, matchDisplayElements));  
-    })
+    updateBtn.addEventListener("click", () => {
+        getLatestMatchID().then((id) =>
+            displayMatchInfo(id, matchDisplayElements)
+        );
+    });
 </script>
