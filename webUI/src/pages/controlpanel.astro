@@ -46,8 +46,10 @@ import UILayout from "@layouts/UILayout.astro";
     </fieldset>
   </fieldset>
 
-  <fieldset id="panel-time-control">
+  <fieldset id="panel-match-state">
     <legend>Time Control</legend>
+    <p>Match State: <span id="match-state">?</span></p>
+    <p>Time: <span id="time-remaining">???</span></p>
     <button id="time-reset">Reset Timer</button>
     <input type="number" name="time-inc" id="time-inc" />
     <button id="time-add">Add Time</button>
@@ -63,6 +65,13 @@ import UILayout from "@layouts/UILayout.astro";
   const resetTimeBtn = document.getElementById("time-reset");
   const timeInput = document.getElementById("time-inc");
   const addTimeBtn = document.getElementById("time-add");
+
+
+  const arenaDisplayElements = {
+        matchStateTarget: document.getElementById("match-state"),
+        timeRemainingTarget: document.getElementById("time-remaining"),
+    };
+
 
   // Dealing with MQTT
 
@@ -81,6 +90,14 @@ import UILayout from "@layouts/UILayout.astro";
     let t = timeInput.value;
     my_mqtt.send("timecontrol", `A${t}`);
   });
+
+  my_mqtt.subscribe_topic("botcontrol", (pkt, params, ctx) => {
+        console.log("Arena says:", pkt.json());
+        let arenaJSON = pkt.json();
+        arenaDisplayElements.matchStateTarget.innerText = arenaJSON.Match_State.replace('_', ' ');
+        arenaDisplayElements.timeRemainingTarget.innerText =
+            arenaJSON.Match_Sec_remain;
+    });
 
   const optionSets = {};
 
