@@ -1,0 +1,57 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Timer">
+  
+
+      <p id="time-remaining">150</p>
+
+</BaseLayout>
+
+<script>
+  import { getLatestMatchID, getMatchDetails, MQTT_WS_URL, API_URL, WS_URL } from "@scripts/utilities";
+  
+  
+  const timeDisplay = document.getElementById("time-remaining");
+
+  import mqtt_client from 'u8-mqtt';
+  let my_mqtt = mqtt_client()
+    .with_websock(MQTT_WS_URL)
+    .with_autoreconnect();
+
+    await my_mqtt.connect();
+
+    my_mqtt.subscribe_topic('botcontrol', (pkt, params, ctx) => {
+        console.log('Arena says:', pkt.json());
+        let arenaJSON = pkt.json();
+        // arenaDisplayElements.matchStateTarget.innerText = arenaJSON.Match_State;
+        timeDisplay.innerText = arenaJSON.Match_Sec_remain;
+        
+
+    })
+</script>
+
+<style>
+  /* the props */
+  @import "open-props/open-props.min.css";
+
+  /* optional imports that use the props */
+  @import "open-props/normalize.min.css";
+
+
+  body {
+    /* background-image: var(--gradient-3); */
+    background-color: black;
+    padding: var(--size-4);
+    display: flex;
+    flex-direction: column; 
+  }
+
+  #time-remaining {
+    color: white;
+    font-size: 50vh;
+    text-align: center;
+  }
+
+</style>
