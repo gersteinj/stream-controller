@@ -43,9 +43,9 @@ import UILayout from "@layouts/UILayout.astro";
     await my_mqtt.connect();
 
     my_mqtt.subscribe_topic("botcontrol", (pkt, params, ctx) => {
-        // console.log("Arena says:", pkt.json());
+        console.log("Arena says:", pkt.json());
         let arenaJSON = pkt.json();
-        arenaDisplayElements.matchStateTarget.innerText = arenaJSON.Match_State;
+        arenaDisplayElements.matchStateTarget.innerText = arenaJSON.Match_State.replace('_', ' ');
         arenaDisplayElements.timeRemainingTarget.innerText =
             arenaJSON.Match_Sec_remain;
     });

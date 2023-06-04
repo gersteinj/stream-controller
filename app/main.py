@@ -10,13 +10,26 @@ from . import crud, models, schemas
 from .database import SessionLocal, engine
 from .myEnums import Weights
 
+MQTT_HOST = '192.168.184.131'
+API_HOST = '192.168.184.41'
+API_PORT = '8000'
+API_URL = f'http://{API_HOST}:{API_PORT}'
+
 models.Base.metadata.create_all(bind=engine)
 
 origins = [
     'http://localhost:8000',
     'http://127.0.0.1:8000',
+    'http://0.0.0.0:8000',
+    'http://192.168.2.5:8000',
+    'http://192.168.184.41:8000',
+    'http://192.168.50.125:8000',
     'http://localhost:3000',
     'http://127.0.0.1:3000',
+    'http://0.0.0.0:3000',
+    'http://192.168.2.5:3000',
+    'http://192.168.184.41:3000',
+    'http://192.168.50.125:3000',
 ]
 
 app = FastAPI()
@@ -29,8 +42,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.mount('/static', StaticFiles(directory='static'), name='static')
-templates = Jinja2Templates(directory='templates')
+# app.mount('/static', StaticFiles(directory='static'), name='static')
+# templates = Jinja2Templates(directory='templates')
 
 # Dependency
 def get_db():
@@ -136,22 +149,22 @@ def get_match_details(match_id: int, db: Session = Depends(get_db)):
     
 
 
-@app.get('/', response_class=HTMLResponse)
-def homepage(request: Request):
-    return templates.TemplateResponse('index.html', {'request': request, 'title': 'Home'})
+# @app.get('/', response_class=HTMLResponse)
+# def homepage(request: Request):
+#     return templates.TemplateResponse('index.html', {'request': request, 'title': 'Home'})
 
-@app.get('/view/controls', response_class=HTMLResponse)
-def control_panel_view(request: Request):
-    return templates.TemplateResponse('control-panel.html', {'request': request, 'title': 'Control Panel'})
+# @app.get('/view/controls', response_class=HTMLResponse)
+# def control_panel_view(request: Request):
+#     return templates.TemplateResponse('control-panel.html', {'request': request, 'title': 'Control Panel'})
 
-@app.get('/view/robots', response_class=HTMLResponse)
-def all_robots_view(request: Request):
-    return templates.TemplateResponse('view-robots.html', {'request': request, 'title': 'View Robots'})
+# @app.get('/view/robots', response_class=HTMLResponse)
+# def all_robots_view(request: Request):
+#     return templates.TemplateResponse('view-robots.html', {'request': request, 'title': 'View Robots'})
 
-@app.get('/view/create', response_class=HTMLResponse)
-def create_robot_view(request: Request):
-    return templates.TemplateResponse('create-robot.html', {'request': request, 'title': 'Create a Robot'})
+# @app.get('/view/create', response_class=HTMLResponse)
+# def create_robot_view(request: Request):
+#     return templates.TemplateResponse('create-robot.html', {'request': request, 'title': 'Create a Robot'})
 
-@app.get('/view/display', response_class=HTMLResponse)
-def display_view(request: Request):
-    return templates.TemplateResponse('display-test.html', {'request': request, 'title': 'Test Display'})
+# @app.get('/view/display', response_class=HTMLResponse)
+# def display_view(request: Request):
+#     return templates.TemplateResponse('display-test.html', {'request': request, 'title': 'Test Display'})

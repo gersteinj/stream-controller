@@ -1,9 +1,11 @@
-const MQTT_HOST = '192.168.2.3';
+// const MQTT_HOST = '192.168.2.3';
+const MQTT_HOST = '192.168.50.185';
 const MQTT_PORT = '9001';
 export const MQTT_WS_URL = `ws://${MQTT_HOST}:${MQTT_PORT}`;
 // export MQTT_WS_URL;
 
-const API_HOST = '192.168.2.5';
+const API_HOST = '192.168.50.125';
+// const API_HOST = '192.168.2.5';
 // const API_HOST = '192.168.184.41';
 const API_PORT = '8000';
 export const API_URL = `http://${API_HOST}:${API_PORT}`;
